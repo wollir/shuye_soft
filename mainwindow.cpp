@@ -3,8 +3,8 @@
 #include<QDesktopWidget>
 #define wireless
 
-#define real_receive_size 60
-#define used_pixel 60
+const int real_receive_size = 60;
+const int used_pixel = 60;
 double view_re[used_pixel];       // kalman 滤波以后的数据
 //unsigned char sorted_60data[used_pixel];
 unsigned char dou2uchar[real_receive_size];
