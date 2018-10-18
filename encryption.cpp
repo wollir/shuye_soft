@@ -1,24 +1,25 @@
 #include "encryption.h"
+#include<QString>
 
 //单个字符异或运算
-inline char MakecodeChar(char &c,int key){
-    return c=c^key;
+inline char MakecodeChar(const char &c,int key){
+    return c^key;
 }
 //单个字符解密
-inline char CutcodeChar(char &c,int key){
+inline char CutcodeChar(const char &c,int key){
     return c^key;
 }
 //加密
-void encryption::Makecode(std::string &pstr){
+void encryption::Makecode(QString &pstr){
     int len=pstr.size();//获取长度
     for(int i=0;i<len;i++)
-        pstr[i]=MakecodeChar(pstr[i],key[i%key.size()]);
+        pstr[i]=MakecodeChar(pstr[i].unicode(),key[i%key.size()]);
 }
 //解密
-void encryption::Cutecode(std::string &pstr){
+void encryption::Cutecode(QString &pstr){
     int len=pstr.size();
     for(int i=0;i<len;i++)
-       pstr[i] = CutcodeChar(pstr[i],key[i%key.size()]);
+       pstr[i] = CutcodeChar(pstr[i].unicode(),key[i%key.size()]);
 }
 
 //int _tmain(int argc, _TCHAR* argv[])

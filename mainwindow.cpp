@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include<QDesktopWidget>
-#define wireless
+//#define wireless 1
 
 const int real_receive_size = 60;
 const int used_pixel = 60;
@@ -55,7 +55,7 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
             re.remove(0,2); //去帧头
             //re.remove(62,1);//去掉最后一字节
             data_process();
-           // curve_update();
+            // curve_update();
         }
         else if((re[0] == 0xff) && (re[1] == 0x02))//判断响应的帧头
         {
@@ -139,9 +139,9 @@ void MainWindow::data_process()
     temp_humi.tempL = re[i++];temp_humi.tempH = re[i++];temp_humi.humiL = re[i++];temp_humi.humiH = re[i++];
     //SortFrom3648(dou2uchar,sorted_60data,used_pixel);       //挑出60个数据；
     calmanfilter.shift_win_filter(dou2uchar,used_pixel);                 // 滑动窗滤波
-//    for(int i = 0; i < used_pixel; i++){            // 卡尔曼滤波
-//         terminal[whose_data-1]->received_data[i] = dou2uchar[i];
-//    }
+    //    for(int i = 0; i < used_pixel; i++){            // 卡尔曼滤波
+    //         terminal[whose_data-1]->received_data[i] = dou2uchar[i];
+    //    }
 
     //qDebug()<< "平均值："<<data_aver(dou2uchar,used_pixel);
     //qDebug()<< "最小点："<<min_position;
@@ -305,8 +305,8 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
 }
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
-   if(index == 0)      serial.setBaudRate(QSerialPort::Baud115200);
-   else                serial.setBaudRate(QSerialPort::Baud9600);
+    if(index == 0)      serial.setBaudRate(QSerialPort::Baud115200);
+    else                serial.setBaudRate(QSerialPort::Baud9600);
 }
 void MainWindow::sys_init()
 {

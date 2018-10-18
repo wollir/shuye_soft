@@ -2,13 +2,15 @@
 #define ENCRYPTION_H
 #include<QVector>
 #include<String>
+
+class QString;
 class encryption
 {
 public:
     explicit encryption(QVector<int> key);
     ~encryption(){}
-    void Makecode(std::string &pstr);
-    void Cutecode(std::string &pstr);
+    void Makecode(QString &pstr);
+    void Cutecode(QString &pstr);
 private:
       QVector<int> key;//加密字符
 };
