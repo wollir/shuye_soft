@@ -4,6 +4,7 @@
 #include<QTime>
 #include<QCoreApplication>
 #include<QTableWidgetItem>
+#include<QFile>
 extern QSerialPort serial;
 void MyDelay(unsigned int msec)
 {
@@ -55,8 +56,8 @@ void DataTOTableView(QTableWidget *tab, terminal_struct *term)
     //QTableWidgetItem *vHeader5 = new QTableWidgetItem;
     //vHeader5->setIcon(QIcon(":/led.png"));
     //tab->setVerticalHeaderItem(0, vHeader5);
-    tab->setItem(term->id -1,1,new QTableWidgetItem(QString::number(term->liq_height,'f',1)+"mm"));
-    tab->setItem(term->id-1 ,2,new QTableWidgetItem(QIcon(":/led.png"), "在线"));
+    tab->setItem(term->id-1,1,new QTableWidgetItem(QString::number(term->liq_height,'f',1)+"mm"));
+    tab->setItem(term->id-1,2,new QTableWidgetItem(QIcon(":/led.png"), "在线"));
     tab->setItem(term->id-1,3,new QTableWidgetItem(term->received_time));
     tab->setItem(term->id-1,4,new QTableWidgetItem(QString::number(term->temprature, 10, 1)));
     tab->setItem(term->id-1,5,new QTableWidgetItem(QString::number(term->Humidity, 10, 1)));
@@ -74,10 +75,25 @@ void DataTOTableView(QTableWidget *tab, terminal_struct *term)
 void cal_TempHumi(sht_data data,double &temp,double &humi)
 {
     unsigned short temp_raw = 0 ,humi_raw = 0;
-           temp_raw = data.tempH<<8;
-           temp_raw |=data.tempL;
-           humi_raw = data.humiH<<8;
-           humi_raw |=data.humiL;
-         temp = -45+175.0*temp_raw/65535;
-         humi = 100.0*humi_raw/65535;
+    temp_raw = data.tempH<<8;
+    temp_raw |=data.tempL;
+    humi_raw = data.humiH<<8;
+    humi_raw |=data.humiL;
+    temp = -45+175.0*temp_raw/65535;
+    humi = 100.0*humi_raw/65535;
+}
+
+QVector<unsigned char> initNode(QString filename)
+{
+    QVector<unsigned char> re;
+    QFile file(filename);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        while (!file.atEnd()){
+            QByteArray line = file.readLine();
+            QString str(line);
+            uchar id = str.toInt();
+            re.push_back(id);
+        }
+        return re;
+    }
 }

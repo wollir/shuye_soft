@@ -19,7 +19,7 @@
 #include<QByteArray>
 #include<QComboBox>
 #include<QTableWidgetItem>
-#include<QVector>
+#include<QList>
 #define max_terminal_num 5
 namespace Ui {
 class MainWindow;
@@ -63,6 +63,7 @@ private slots:
     void on_comboBox_3_currentTextChanged(const QString &arg1);
 
     void on_comboBox_currentIndexChanged(int index);
+    void on_pushButton_6_clicked();
 
 signals:
     void add_com();
@@ -84,8 +85,8 @@ private:
     QVector<terminal_struct*> terminal;//(max_terminal_num,nullptr);
     QVector<uchar> active_key{69,82,0,0,0,50,0,15,66,64,0,0};  //控制 ICG SH的积分时间
     QVector<uchar> addr{0x00,0x00,0x17};  // 两字节地址，1字节目标信道
-    //QVector<uchar> active_key{69,82,0,0,0,20,0,15,66,64,0,0};  //控制 ICG = 1000 000 SH =100
     QVector<uchar> call_terminal{69,82,1,1,1,1,1,1,1,1,1,1}; //召唤下位机，收到回复说明存在
+
     bool exit_flag[max_terminal_num] = {0,0,0,0,0};  //第几位表示第几个节点为1。
     //X轴
     double pixel[10] = {0, 5, 9,10, 14,25,36,38,50,52};
@@ -105,6 +106,7 @@ private:
     //bool uart_statu = 0;// 串口状态
     int whose_data;//指示是哪个终端的数据
     //测试下位机存在与否
+    QList<terminal_struct> *Nodes;
 
 };
 #endif // MAINWINDOW_H

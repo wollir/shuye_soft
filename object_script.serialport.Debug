@@ -1,0 +1,13 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\calman.o
+./debug\someapp.o
+./debug\_login.o
+./debug\encryption.o
+./debug\signin.o
+./debug\qrc_picture.o
+./debug\moc_mainwindow.o
+./debug\moc__login.o
+./debug\moc_signin.o
+);

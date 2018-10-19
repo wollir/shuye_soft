@@ -70,6 +70,7 @@ public:
     QLabel *label_5;
     QPushButton *pushButton_4;
     QLabel *label_7;
+    QPushButton *pushButton_6;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -211,7 +212,7 @@ public:
         tableWidget->verticalHeader()->setVisible(false);
         groupBox_2 = new QGroupBox(centralWidget);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        groupBox_2->setGeometry(QRect(680, 190, 211, 211));
+        groupBox_2->setGeometry(QRect(680, 190, 211, 181));
         pushButton_3 = new QPushButton(groupBox_2);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
         pushButton_3->setGeometry(QRect(20, 70, 75, 23));
@@ -245,7 +246,11 @@ public:
         label_7->setObjectName(QStringLiteral("label_7"));
         label_7->setGeometry(QRect(40, 160, 21, 21));
         label_7->setTextFormat(Qt::RichText);
+        pushButton_6 = new QPushButton(centralWidget);
+        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
+        pushButton_6->setGeometry(QRect(800, 390, 75, 23));
         MainWindow->setCentralWidget(centralWidget);
+        layoutWidget->raise();
         groupBox->raise();
         layoutWidget->raise();
         layoutWidget->raise();
@@ -317,6 +322,7 @@ public:
         label_5->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273\345\221\250\346\234\237\357\274\232", 0));
         pushButton_4->setText(QApplication::translate("MainWindow", "\350\207\252\345\212\250\346\277\200\346\264\273", 0));
         label_7->setText(QApplication::translate("MainWindow", "a", 0));
+        pushButton_6->setText(QApplication::translate("MainWindow", "\346\263\250\345\206\214\347\273\210\347\253\257", 0));
     } // retranslateUi
 
 };

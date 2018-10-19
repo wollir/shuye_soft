@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include<QDesktopWidget>
+#include<QTime>
+#include"signin.h"
 //#define wireless 1
 
 const int real_receive_size = 60;
@@ -12,7 +14,7 @@ sht_data temp_humi;
 unsigned char  yuzhi = 0;
 uchar min_position = 0;
 uchar current_row = 0; //当前tablewigit的行数
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),Nodes(new QList<terminal_struct> )
 {
     ui->setupUi(this);
     sys_init();
@@ -43,9 +45,7 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
     numReadTotal += qa.length();
     if(numReadTotal == 2 + real_receive_size + 1 + 4)   //接收固定的 俩帧头 + 60个字节 + 终端号 +温湿度
     {
-        //int lable_val = ui->label_4->text().toInt();
         ui->label_4->setText(QString::number(re.length()));  //显示接收的长度
-        //qDebug()<<re;
         //QString current_text = ui->textEdit_2->toPlainText();
         //ui->textEdit_2->setText(current_text + re.toHex());
         if((re[0] == 0xfe) && (re[1] == 0x01))//判断帧头
@@ -53,7 +53,6 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
             whose_data =re[real_receive_size+2+4];//[62]
             recieve_succeed = 1;   //按钮事件等待这个标志来处理信息
             re.remove(0,2); //去帧头
-            //re.remove(62,1);//去掉最后一字节
             data_process();
             // curve_update();
         }
@@ -238,7 +237,12 @@ void MainWindow::call_for_terminal() //这里发，serialread 收
         serial.write((const char*)terminal[i]->channle_addr.begin(),3);
 #endif
         serial.write((const char*)terminal[i]->call_cmd.begin(),12);
-        MyDelay(2000);
+        //实现延时2s与等待时间发生两个其中之一
+        QTime _Timer = QTime::currentTime().addMSecs(2000);
+
+        while( QTime::currentTime() < _Timer && !terminal[i]->isexist)
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
         if(terminal[i]->isexist){
             ui->comboBox_3->addItem(QString::number(i+1));
         }
@@ -248,10 +252,8 @@ void MainWindow::on_pushButton_5_clicked()   //扫描
 {
     if(serial.isOpen()){
         ui->comboBox_3->clear();
-        //ui->pushButton_5->setDisabled(true);
         ui->groupBox_2->setDisabled(true);
         call_for_terminal();
-        //ui->pushButton_5->setDisabled(false);
         ui->groupBox_2->setDisabled(false);
         serial.clear();
     }
@@ -277,7 +279,11 @@ void MainWindow::active()
             serial.write((const char*)terminal[i]->channle_addr.begin(),3);
 #endif
             serial.write((const char*)terminal[i]->activat_cmd.begin(),12);
-            MyDelay(2000);
+            QTime _Timer = QTime::currentTime().addMSecs(2000);
+
+            while( QTime::currentTime() < _Timer && !recieve_succeed)
+                QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
             if(recieve_succeed == 1)
                 things_todo_after_received(terminal[i]);
             else
@@ -344,25 +350,19 @@ void MainWindow::sys_init()
     ui->groupBox_2->setDisabled(true);
     curve_init();
     connect(&timer,SIGNAL(timeout()),this,SLOT(timeout_()));
-    //timer.setInterval();
     timer.start(100);
     for(int i = 0;i<real_receive_size;i++)     {  pixel1[i] = i;   }//初始化曲线坐标
-    for(int i = 0;i<max_terminal_num;i++)
-    {
-        terminal.append(new terminal_struct);
-        //terminal[i] = new terminal_struct; //申请节点空间
-        call_terminal[2] = i+1;
-        terminal[i]->call_cmd = call_terminal;
-
-        active_key[10] = i+1;
-        terminal[i]->activat_cmd = active_key;
-        addr[1] = i;
-        terminal[i]->channle_addr = addr;
-        //terminal[i]->received_data = 0;
-        terminal[i]->received_time = "";
-        terminal[i]->isexist = 0;
-        terminal[i]->id = i+1;
+    //初始化终端
+    QString filePath =  "./node_info/node_info.txt";
+    auto term_id = initNode(filePath);
+    for(int i = 0; i <term_id.size();i++){
+        terminal.append(new terminal_struct(term_id[i]));
     }
 }
 
-
+//注册节点
+void MainWindow::on_pushButton_6_clicked()
+{
+    SignIn *si = new SignIn(Nodes);
+    si->show();
+}
