@@ -186,18 +186,6 @@ public:
         tableWidget->setHorizontalHeaderItem(4, __qtablewidgetitem4);
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(5, __qtablewidgetitem5);
-        if (tableWidget->rowCount() < 5)
-            tableWidget->setRowCount(5);
-        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
-        tableWidget->setItem(0, 0, __qtablewidgetitem6);
-        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
-        tableWidget->setItem(1, 0, __qtablewidgetitem7);
-        QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
-        tableWidget->setItem(2, 0, __qtablewidgetitem8);
-        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
-        tableWidget->setItem(3, 0, __qtablewidgetitem9);
-        QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
-        tableWidget->setItem(4, 0, __qtablewidgetitem10);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
         tableWidget->setGeometry(QRect(30, 440, 551, 181));
         tableWidget->setFocusPolicy(Qt::NoFocus);
@@ -206,7 +194,7 @@ public:
         tableWidget->setLineWidth(1);
         tableWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
         tableWidget->setTextElideMode(Qt::ElideLeft);
-        tableWidget->setRowCount(5);
+        tableWidget->setRowCount(0);
         tableWidget->setColumnCount(6);
         tableWidget->horizontalHeader()->setStretchLastSection(true);
         tableWidget->verticalHeader()->setVisible(false);
@@ -250,7 +238,7 @@ public:
         pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
         pushButton_6->setGeometry(QRect(800, 390, 75, 23));
         MainWindow->setCentralWidget(centralWidget);
-        layoutWidget->raise();
+        pushButton_6->raise();
         groupBox->raise();
         layoutWidget->raise();
         layoutWidget->raise();
@@ -299,21 +287,6 @@ public:
         ___qtablewidgetitem4->setText(QApplication::translate("MainWindow", "\346\270\251\345\272\246\357\274\210\342\204\203\357\274\211", 0));
         QTableWidgetItem *___qtablewidgetitem5 = tableWidget->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QApplication::translate("MainWindow", "\345\256\244\345\206\205\346\271\277\345\272\246", 0));
-
-        const bool __sortingEnabled = tableWidget->isSortingEnabled();
-        tableWidget->setSortingEnabled(false);
-        QTableWidgetItem *___qtablewidgetitem6 = tableWidget->item(0, 0);
-        ___qtablewidgetitem6->setText(QApplication::translate("MainWindow", "1", 0));
-        QTableWidgetItem *___qtablewidgetitem7 = tableWidget->item(1, 0);
-        ___qtablewidgetitem7->setText(QApplication::translate("MainWindow", "2", 0));
-        QTableWidgetItem *___qtablewidgetitem8 = tableWidget->item(2, 0);
-        ___qtablewidgetitem8->setText(QApplication::translate("MainWindow", "3", 0));
-        QTableWidgetItem *___qtablewidgetitem9 = tableWidget->item(3, 0);
-        ___qtablewidgetitem9->setText(QApplication::translate("MainWindow", "4", 0));
-        QTableWidgetItem *___qtablewidgetitem10 = tableWidget->item(4, 0);
-        ___qtablewidgetitem10->setText(QApplication::translate("MainWindow", "5", 0));
-        tableWidget->setSortingEnabled(__sortingEnabled);
-
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\210\347\253\257\346\216\247\345\210\266", 0));
         pushButton_3->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273CCD", 0));
         pushButton_5->setText(QApplication::translate("MainWindow", "\346\211\253\346\217\217", 0));

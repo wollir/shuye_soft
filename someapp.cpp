@@ -37,9 +37,7 @@ unsigned char data_aver(unsigned char* data, int size)
     return temp/60;
 }
 void get_terminal_num(void)
-{
-    ;
-}
+{}
 QString get_time()
 {
     QDateTime current_date_time =QDateTime::currentDateTime();
@@ -49,27 +47,34 @@ QString get_time()
 }
 void terminal_disconnected(QTableWidget *tab,terminal_struct *term)
 {
-    tab->setItem(term->id-1 ,2,new QTableWidgetItem(QIcon(":/red_led.png"), "掉线"));
+   int hang = LineInTableWidget(tab,term->id);
+    tab->setItem(hang ,2,new QTableWidgetItem(QIcon(":/red_led.png"), "掉线"));
+}
+void initTableView(QTableWidget *tab,QList<terminal_struct> *Nodes)
+{
+    QList<terminal_struct>::iterator ite = Nodes->begin();
+    int i = 0;
+    for( ;ite != Nodes->end();ite++){
+        int rowIndex = tab->rowCount();
+        tab->setRowCount(rowIndex + 1);//总行数增加1
+        tab->setItem(i,0,new QTableWidgetItem(QString::number(ite->id)));
+        tab->setItem(i,1,new QTableWidgetItem(QString::number(ite->liq_height,'f',1)+"mm"));
+        tab->setItem(i,2,new QTableWidgetItem(QIcon(":/red_led.png"), "离线"));
+        tab->setItem(i,3,new QTableWidgetItem(ite->received_time));
+        tab->setItem(i,4,new QTableWidgetItem(QString::number(ite->temprature, 10, 1)));
+        tab->setItem(i,5,new QTableWidgetItem(QString::number(ite->Humidity, 10, 1)));
+        i++;
+    }
 }
 void DataTOTableView(QTableWidget *tab, terminal_struct *term)
 {
-    //QTableWidgetItem *vHeader5 = new QTableWidgetItem;
-    //vHeader5->setIcon(QIcon(":/led.png"));
-    //tab->setVerticalHeaderItem(0, vHeader5);
-    tab->setItem(term->id-1,1,new QTableWidgetItem(QString::number(term->liq_height,'f',1)+"mm"));
-    tab->setItem(term->id-1,2,new QTableWidgetItem(QIcon(":/led.png"), "在线"));
-    tab->setItem(term->id-1,3,new QTableWidgetItem(term->received_time));
-    tab->setItem(term->id-1,4,new QTableWidgetItem(QString::number(term->temprature, 10, 1)));
-    tab->setItem(term->id-1,5,new QTableWidgetItem(QString::number(term->Humidity, 10, 1)));
-    //tab->setItem(0,1,new QTableWidgetItem(QIcon("led.png"), "Jan's month"));
-
-    //    QTableWidgetItem *item5_0 = new QTableWidgetItem;
-    //    QTableWidgetItem *item5_1 = new QTableWidgetItem;
-    //    item5_0->setText(QString("%1").arg(5));
-    //    item5_1->setText(QString("%1").arg(5));
-    //    tab->setItem(0, 0, item5_0);
-    //    tab->setItem(0, 1, item5_1);
-    //tab->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    //找出在第几行
+   int hang = LineInTableWidget(tab,term->id);
+    tab->setItem(hang,1,new QTableWidgetItem(QString::number(term->liq_height,'f',1)+"mm"));
+    tab->setItem(hang,2,new QTableWidgetItem(QIcon(":/led.png"), "在线"));
+    tab->setItem(hang,3,new QTableWidgetItem(term->received_time));
+    tab->setItem(hang,4,new QTableWidgetItem(QString::number(term->temprature, 10, 1)));
+    tab->setItem(hang,5,new QTableWidgetItem(QString::number(term->Humidity, 10, 1)));
 }
 // 计算真是的温湿度
 void cal_TempHumi(sht_data data,double &temp,double &humi)
@@ -82,7 +87,6 @@ void cal_TempHumi(sht_data data,double &temp,double &humi)
     temp = -45+175.0*temp_raw/65535;
     humi = 100.0*humi_raw/65535;
 }
-
 QVector<unsigned char> initNode(QString filename)
 {
     QVector<unsigned char> re;
@@ -96,4 +100,25 @@ QVector<unsigned char> initNode(QString filename)
         }
         return re;
     }
+}
+
+int LineInTableWidget(QTableWidget *tab, uchar id)
+{
+    int i = 0;
+    for(; i < tab->rowCount();i++){
+        int num = tab->item(i,0)->text().toInt();//取出字符串
+        if(id == num)
+            break;
+    }
+    return i;
+}
+
+QList<terminal_struct> ::iterator which_node(uchar id, QList<terminal_struct> *Nodes)
+{
+    QList<terminal_struct> ::iterator ite = nullptr;
+    for(ite = Nodes->begin();ite != Nodes->end();ite++){
+        if(id == ite->id)
+            return ite;
+    }
+    return ite;
 }

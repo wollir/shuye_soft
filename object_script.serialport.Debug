@@ -6,6 +6,7 @@ INPUT(
 ./debug\_login.o
 ./debug\encryption.o
 ./debug\signin.o
+./debug\database.o
 ./debug\qrc_picture.o
 ./debug\moc_mainwindow.o
 ./debug\moc__login.o

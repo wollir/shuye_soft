@@ -6,7 +6,7 @@
 
 QT       += core gui
 QT       += serialport
-
+QT       += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = serialport
@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     someapp.cpp \
     _login.cpp \
     encryption.cpp \
-    signin.cpp
+    signin.cpp \
+    database.cpp
 
 HEADERS  += mainwindow.h \
     calman.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     gousi.h \
     _login.h \
     encryption.h \
-    signin.h
+    signin.h \
+    database.h
 
 FORMS    += mainwindow.ui \
     _login.ui \

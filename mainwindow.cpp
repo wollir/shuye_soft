@@ -3,6 +3,7 @@
 #include<QDesktopWidget>
 #include<QTime>
 #include"signin.h"
+#include"database.h"
 //#define wireless 1
 
 const int real_receive_size = 60;
@@ -42,25 +43,28 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
     timer.stop();  // 读串口的时候关掉定时器，以免受到影响。
     QByteArray qa = serial.readAll();
     re.append(qa);
+    static int numReadTotal = 0;
     numReadTotal += qa.length();
     if(numReadTotal == 2 + real_receive_size + 1 + 4)   //接收固定的 俩帧头 + 60个字节 + 终端号 +温湿度
     {
         ui->label_4->setText(QString::number(re.length()));  //显示接收的长度
         //QString current_text = ui->textEdit_2->toPlainText();
         //ui->textEdit_2->setText(current_text + re.toHex());
-        if((re[0] == 0xfe) && (re[1] == 0x01))//判断帧头
+        if((re[0] == 0xfe) && (re[1] == 0x01))//数据
         {
-            whose_data =re[real_receive_size+2+4];//[62]
+            //Ite_cur = which_node(re[real_receive_size+2+4],Nodes);
             recieve_succeed = 1;   //按钮事件等待这个标志来处理信息
+            qDebug() << "recieve_succeed";
             re.remove(0,2); //去帧头
-            data_process();
-            // curve_update();
         }
-        else if((re[0] == 0xff) && (re[1] == 0x02))//判断响应的帧头
+        else if((re[0] == 0xff) && (re[1] == 0x02))//回应，call terminal
         {
-            terminal[re[2]-1]->isexist = 1;
+            if(re[2] == 11)
+                int a = 0;
+            if(re[2] == Ite_cur->id )//确认是当前终端的数据
+                Ite_cur->isexist = true;
+            re = 0;
         }
-        re = 0;
         numReadTotal = 0;
         serial.clear();
     }
@@ -68,7 +72,6 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
 }
 void MainWindow::timeout_()  // 100ms 一次
 {
-    timer_divide++;
     if(aoto_active_statues){ //如果是激活状态
         timer_divide_active++;
 
@@ -109,24 +112,21 @@ void MainWindow::curve_init()
 }
 void MainWindow::curve_update()
 {
-    for(int i = 0; i < used_pixel; i++){            // 卡尔曼滤波
-        view_re [i] =  (double)terminal[whose_data-1]->received_data[i];
+    for(int i = 0; i < used_pixel; i++){
+        view_re [i] =  (double)whichtoDisplay->received_data[i];
     }
+    ui->Thermo->setValue(whichtoDisplay->liq_height);
+    ui->label_8->setText(QString::number(whichtoDisplay->liq_height, 10, 1)+"MM");
     curve.setPen(QPen(Qt::yellow));//设置画笔
     x_falling[0] = x_falling[1] = min_position;
     curve.setSamples(x_falling,y_falling,2);  // 标志下降沿
     // ----------------------- 存储数据到文本
-    save_data(dou2uchar,used_pixel);
-    ui->textEdit_2->setText(prepare_str_for_textview(dou2uchar,used_pixel));
-    // curve_2.setSamples((double)falling,pixel1);
-    //    curve.setSamples(pixel1,view_re,real_receive_size);
-    //    curve.attach(ui->qwtPlot);
-    //    ui->qwtPlot->replot();
+    //save_data(dou2uchar,used_pixel);
+    ui->textEdit_2->setText(prepare_str_for_textview(whichtoDisplay->received_data,used_pixel));
     curve_2.setSamples(pixel1,view_re,used_pixel);
     curve_2.attach(ui->qwtPlot_2);
     curve.attach(ui->qwtPlot_2);
     ui->qwtPlot_2->replot();
-    re = 0;
 }
 void MainWindow::data_process()
 {
@@ -135,15 +135,11 @@ void MainWindow::data_process()
         dou2uchar[i] =  (uchar)re[i];
     }
     //i++;
-    temp_humi.tempL = re[i++];temp_humi.tempH = re[i++];temp_humi.humiL = re[i++];temp_humi.humiH = re[i++];
+    temp_humi.tempL = re[i++];temp_humi.tempH = re[i++];
+    temp_humi.humiL = re[i++];temp_humi.humiH = re[i++];
     //SortFrom3648(dou2uchar,sorted_60data,used_pixel);       //挑出60个数据；
     calmanfilter.shift_win_filter(dou2uchar,used_pixel);                 // 滑动窗滤波
-    //    for(int i = 0; i < used_pixel; i++){            // 卡尔曼滤波
-    //         terminal[whose_data-1]->received_data[i] = dou2uchar[i];
-    //    }
-
-    //qDebug()<< "平均值："<<data_aver(dou2uchar,used_pixel);
-    //qDebug()<< "最小点："<<min_position;
+    re = 0;
 }
 //---------------------------- 串口号改变
 void MainWindow::on_comboBox_2_currentTextChanged(const QString &arg1)
@@ -231,20 +227,25 @@ void MainWindow::on_pushButton_4_clicked() //自动激活
 }
 void MainWindow::call_for_terminal() //这里发，serialread 收
 {
-    for(int i = 0; i < max_terminal_num; i++){
-        // call_terminal[2] = i;  //将召唤数据的第三位，改为编号 1-6
+    QList<terminal_struct> ::iterator ite =Nodes->begin();
+    for(; ite != Nodes->end();ite++)
+    {
+        qDebug() <<"term:"<<ite->id;
+        Ite_cur = ite;
+        ite->isexist = false;
 #ifdef wireless
-        serial.write((const char*)terminal[i]->channle_addr.begin(),3);
+        serial.write((const char*)ite->addr_channle,3);
 #endif
-        serial.write((const char*)terminal[i]->call_cmd.begin(),12);
+        serial.write((const char*)ite->call_cmd.begin(),12);
+
         //实现延时2s与等待时间发生两个其中之一
         QTime _Timer = QTime::currentTime().addMSecs(2000);
-
-        while( QTime::currentTime() < _Timer && !terminal[i]->isexist)
+        while( QTime::currentTime() < _Timer && !ite->isexist)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
-        if(terminal[i]->isexist){
-            ui->comboBox_3->addItem(QString::number(i+1));
+        if(ite->isexist){
+            qDebug()<<"exist!";
+            DataTOTableView(ui->tableWidget,&(*ite)); //更新表格
+            ui->comboBox_3->addItem(QString::number(ite->id));
         }
     }
 }
@@ -266,28 +267,34 @@ void MainWindow::on_refresh_b_clicked()
 }
 void MainWindow::on_comboBox_3_currentTextChanged(const QString &arg1)
 {
-    active_key[10] = arg1.toInt();
+    whichtoDisplay = which_node(arg1.toInt(),Nodes);
 }
 void MainWindow::active()
 {
     ui->pushButton_3->setDisabled(true);
-    for(int i= 0; i< max_terminal_num;i++)
+    QList<terminal_struct> ::iterator ite =Nodes->begin();
+    for(; ite != Nodes->end(); ite++)
     {
+        Ite_cur = ite;
+        if(!ite->isexist)//当前节点不存在
+            continue;
         recieve_succeed = 0;
-        if(terminal[i]->isexist){    //节点已经注册的话
 #ifdef wireless
-            serial.write((const char*)terminal[i]->channle_addr.begin(),3);
+        serial.write((const char*)ite->addr_channle,3);
 #endif
-            serial.write((const char*)terminal[i]->activat_cmd.begin(),12);
-            QTime _Timer = QTime::currentTime().addMSecs(2000);
+        serial.write((const char*)ite->activat_cmd.begin(),12);
 
-            while( QTime::currentTime() < _Timer && !recieve_succeed)
-                QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        QTime _Timer = QTime::currentTime().addMSecs(2000);
+        while( QTime::currentTime() < _Timer && !recieve_succeed)
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
-            if(recieve_succeed == 1)
-                things_todo_after_received(terminal[i]);
-            else
-                terminal_disconnected(ui->tableWidget,terminal[i]);
+        if(recieve_succeed == 1){
+            data_process();
+            things_todo_after_received(&(*ite)); //相当于Ite_cur
+        }
+        else{
+            terminal_disconnected(ui->tableWidget,&(*ite));
+            re = 0;
         }
     }
     ui->pushButton_3->setDisabled(false);
@@ -298,16 +305,15 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     for(int i =0;i<used_pixel;i++)
         term->received_data[i] =dou2uchar[i];
     cal_TempHumi(temp_humi,term->temprature,term->Humidity); //计算温湿度
-    qDebug()<<"湿度："<< term->Humidity<<" 温度："<< term->temprature <<endl;
+    //qDebug()<<"湿度："<< term->Humidity<<" 温度："<< term->temprature <<endl;
     min_position = calmanfilter.find_min1(term->received_data,used_pixel);
     //qDebug()<< min_position <<endl;
 
     term->liq_height =  calmanfilter.liquid_pos(min_position);
-    ui->Thermo->setValue(term->liq_height);
-    ui->label_8->setText(QString::number(term->liq_height, 10, 1)+"MM");
     term->received_time = get_time();
     DataTOTableView(ui->tableWidget,term); //表格显示
-    curve_update();
+    if(&(*whichtoDisplay) == term)
+        curve_update();
 }
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
@@ -342,6 +348,18 @@ void MainWindow::sys_init()
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(4,QHeaderView::ResizeToContents);
     //ui->tableWidget->setItem(0,0,new QTableWidgetItem("1"));
 
+    //连接数据库,初始化终端
+    databasehandle = Database::getDatabaseP();
+    if(!databasehandle->creat_sql_connection())
+        return ;
+    QList<uchar> term_id = databasehandle->get_lastNodes();
+    //QString filePath =  "./node_info/node_info.txt";
+    //auto term_id = initNode(filePath);
+    QList<uchar>::iterator ite = term_id.begin();
+    for(; ite != term_id.end();ite++){
+        Nodes->push_back(terminal_struct(*ite));
+    }
+    initTableView(ui->tableWidget,Nodes);
     // 刚开始 关闭串口，激活，自动激活 都应失效。
     ui->pushButton_2->setDisabled(true);
     ui->pushButton_3->setDisabled(true);
@@ -351,18 +369,20 @@ void MainWindow::sys_init()
     curve_init();
     connect(&timer,SIGNAL(timeout()),this,SLOT(timeout_()));
     timer.start(100);
-    for(int i = 0;i<real_receive_size;i++)     {  pixel1[i] = i;   }//初始化曲线坐标
-    //初始化终端
-    QString filePath =  "./node_info/node_info.txt";
-    auto term_id = initNode(filePath);
-    for(int i = 0; i <term_id.size();i++){
-        terminal.append(new terminal_struct(term_id[i]));
-    }
+    for(int i = 0;i < real_receive_size;i++)     {  pixel1[i] = i;   }//初始化曲线坐标
 }
-
-//注册节点
+//终端管理
 void MainWindow::on_pushButton_6_clicked()
 {
-    SignIn *si = new SignIn(Nodes);
+    SignIn *si = new SignIn(Nodes,ui->tableWidget,ui->comboBox_3);
     si->show();
+
+}
+//双击 tablewidget
+void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+{
+    int id = ui->tableWidget->item(row,0)->text().toInt();
+    qDebug() << id;
+    whichtoDisplay =  which_node(id,Nodes);
+     curve_update();
 }

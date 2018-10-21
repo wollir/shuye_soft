@@ -213,6 +213,7 @@ Makefile: serialport.pro D:/Qt/Qt5.7.0/5.7/mingw53_32/mkspecs/win32-g++/qmake.co
 		D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Widgets.prl \
 		D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Gui.prl \
 		D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5SerialPort.prl \
+		D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Sql.prl \
 		D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Core.prl
 	$(QMAKE) -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" -o Makefile serialport.pro
 D:/Qt/Qt5.7.0/5.7/mingw53_32/mkspecs/features/spec_pre.prf:
@@ -369,6 +370,7 @@ D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Svg.prl:
 D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Widgets.prl:
 D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Gui.prl:
 D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5SerialPort.prl:
+D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Sql.prl:
 D:/Qt/Qt5.7.0/5.7/mingw53_32/lib/Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" -o Makefile serialport.pro

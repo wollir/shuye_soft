@@ -264,7 +264,7 @@
      <enum>Qt::ElideLeft</enum>
     </property>
     <property name="rowCount">
-     <number>5</number>
+     <number>0</number>
     </property>
     <property name="columnCount">
      <number>6</number>
@@ -275,11 +275,6 @@
     <attribute name="verticalHeaderVisible">
      <bool>false</bool>
     </attribute>
-    <row/>
-    <row/>
-    <row/>
-    <row/>
-    <row/>
     <column>
      <property name="text">
       <string>终端编号</string>
@@ -310,31 +305,6 @@
       <string>室内湿度</string>
      </property>
     </column>
-    <item row="0" column="0">
-     <property name="text">
-      <string>1</string>
-     </property>
-    </item>
-    <item row="1" column="0">
-     <property name="text">
-      <string>2</string>
-     </property>
-    </item>
-    <item row="2" column="0">
-     <property name="text">
-      <string>3</string>
-     </property>
-    </item>
-    <item row="3" column="0">
-     <property name="text">
-      <string>4</string>
-     </property>
-    </item>
-    <item row="4" column="0">
-     <property name="text">
-      <string>5</string>
-     </property>
-    </item>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
@@ -491,7 +461,7 @@
      <string>注册终端</string>
     </property>
    </widget>
-   <zorder>layoutWidget</zorder>
+   <zorder>pushButton_6</zorder>
    <zorder>groupBox</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>

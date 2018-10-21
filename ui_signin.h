@@ -38,6 +38,7 @@ public:
     QLineEdit *lineEdit;
     QSpacerItem *verticalSpacer;
     QPushButton *pushButton_2;
+    QLabel *label_2;
 
     void setupUi(QWidget *SignIn)
     {
@@ -83,8 +84,12 @@ public:
 
         gridLayout->addWidget(pushButton_2, 2, 1, 1, 1);
 
+        label_2 = new QLabel(SignIn);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setGeometry(QRect(240, 100, 54, 12));
         layoutWidget->raise();
         listView->raise();
+        label_2->raise();
 
         retranslateUi(SignIn);
 
@@ -97,6 +102,7 @@ public:
         pushButton->setText(QApplication::translate("SignIn", "\346\267\273\345\212\240", 0));
         label->setText(QApplication::translate("SignIn", "\347\273\210\347\253\257\345\217\267\357\274\232", 0));
         pushButton_2->setText(QApplication::translate("SignIn", "\345\210\240\351\231\244", 0));
+        label_2->setText(QString());
     } // retranslateUi
 
 };
