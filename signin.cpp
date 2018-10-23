@@ -50,26 +50,32 @@ void SignIn::on_pushButton_clicked()
             return;
         }
     }
-    IDs->push_back(terminal_struct(newid));
+    terminal_struct *temp = new terminal_struct(newid);
+    IDs->push_back(*temp);
     freshListView();
     //tablewidget 增加一行
     int rowIndex = tab->rowCount();
     tab->setRowCount(rowIndex + 1);//总行数增加1
     tab->setItem(rowIndex,0,new QTableWidgetItem(QString::number(newid)));
+    tab->setItem(rowIndex,1,new QTableWidgetItem(QString::number(temp->liq_height,'f',1)+"mm"));
+    tab->setItem(rowIndex,2,new QTableWidgetItem(QIcon(":/gray_led.png"), "离线"));
+    tab->setItem(rowIndex,3,new QTableWidgetItem(temp->received_time));
+    tab->setItem(rowIndex,4,new QTableWidgetItem(QString::number(temp->temprature, 10, 1)));
+    tab->setItem(rowIndex,5,new QTableWidgetItem(QString::number(temp->Humidity, 10, 1)));
     //数据库中增加一行
     db->addOneNode(newid);
     ui->label_2->setText("Succeed!");
 }
 int find_newidNum(QList<terminal_struct> *IDs,uchar newid)
 {
-   QList<terminal_struct>::iterator ite = IDs->begin();
-   int index = 0;
-   for(;ite != IDs->end();++ite){
-       if(ite->id == newid)
-           return index;
-          index ++;
-   }
-   return -1;
+    QList<terminal_struct>::iterator ite = IDs->begin();
+    int index = 0;
+    for(;ite != IDs->end();++ite){
+        if(ite->id == newid)
+            return index;
+        index ++;
+    }
+    return -1;
 }
 //删除节点
 void SignIn::on_pushButton_2_clicked()
@@ -79,7 +85,7 @@ void SignIn::on_pushButton_2_clicked()
         ui->label_2->setText("Error!");
         return;
     }
-     uchar newid = str.toInt();
+    uchar newid = str.toInt();
     int index = -1;
     int count = 0;
     for(auto X:*IDs){

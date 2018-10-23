@@ -48,6 +48,7 @@ public:
         listView = new QListView(SignIn);
         listView->setObjectName(QStringLiteral("listView"));
         listView->setGeometry(QRect(0, 10, 171, 192));
+        listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         layoutWidget = new QWidget(SignIn);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
         layoutWidget->setGeometry(QRect(180, 10, 131, 80));

@@ -63,7 +63,6 @@ public:
     QGroupBox *groupBox_2;
     QPushButton *pushButton_3;
     QPushButton *pushButton_5;
-    QLabel *label_9;
     QComboBox *comboBox_3;
     QLabel *label_6;
     QSpinBox *spinBox;
@@ -71,6 +70,7 @@ public:
     QPushButton *pushButton_4;
     QLabel *label_7;
     QPushButton *pushButton_6;
+    QLabel *label_9;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -203,13 +203,10 @@ public:
         groupBox_2->setGeometry(QRect(680, 190, 211, 181));
         pushButton_3 = new QPushButton(groupBox_2);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        pushButton_3->setGeometry(QRect(20, 70, 75, 23));
+        pushButton_3->setGeometry(QRect(120, 70, 75, 23));
         pushButton_5 = new QPushButton(groupBox_2);
         pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
         pushButton_5->setGeometry(QRect(150, 30, 41, 23));
-        label_9 = new QLabel(groupBox_2);
-        label_9->setObjectName(QStringLiteral("label_9"));
-        label_9->setGeometry(QRect(10, 30, 54, 12));
         comboBox_3 = new QComboBox(groupBox_2);
         comboBox_3->setObjectName(QStringLiteral("comboBox_3"));
         comboBox_3->setGeometry(QRect(70, 30, 69, 22));
@@ -232,11 +229,14 @@ public:
         pushButton_4->setGeometry(QRect(120, 150, 75, 23));
         label_7 = new QLabel(groupBox_2);
         label_7->setObjectName(QStringLiteral("label_7"));
-        label_7->setGeometry(QRect(40, 160, 21, 21));
+        label_7->setGeometry(QRect(40, 150, 21, 21));
         label_7->setTextFormat(Qt::RichText);
         pushButton_6 = new QPushButton(centralWidget);
         pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
         pushButton_6->setGeometry(QRect(800, 390, 75, 23));
+        label_9 = new QLabel(centralWidget);
+        label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setGeometry(QRect(690, 390, 32, 32));
         MainWindow->setCentralWidget(centralWidget);
         pushButton_6->raise();
         groupBox->raise();
@@ -245,6 +245,7 @@ public:
         qwtPlot_2->raise();
         tableWidget->raise();
         groupBox_2->raise();
+        label_9->raise();
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
@@ -290,12 +291,12 @@ public:
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\210\347\253\257\346\216\247\345\210\266", 0));
         pushButton_3->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273CCD", 0));
         pushButton_5->setText(QApplication::translate("MainWindow", "\346\211\253\346\217\217", 0));
-        label_9->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\357\274\232", 0));
         label_6->setText(QApplication::translate("MainWindow", "S", 0));
         label_5->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273\345\221\250\346\234\237\357\274\232", 0));
         pushButton_4->setText(QApplication::translate("MainWindow", "\350\207\252\345\212\250\346\277\200\346\264\273", 0));
-        label_7->setText(QApplication::translate("MainWindow", "a", 0));
+        label_7->setText(QString());
         pushButton_6->setText(QApplication::translate("MainWindow", "\346\263\250\345\206\214\347\273\210\347\253\257", 0));
+        label_9->setText(QString());
     } // retranslateUi
 
 };

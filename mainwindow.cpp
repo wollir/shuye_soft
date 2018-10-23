@@ -271,6 +271,7 @@ void MainWindow::on_comboBox_3_currentTextChanged(const QString &arg1)
 }
 void MainWindow::active()
 {
+    bool isAlarm = false;
     ui->pushButton_3->setDisabled(true);
     QList<terminal_struct> ::iterator ite =Nodes->begin();
     for(; ite != Nodes->end(); ite++)
@@ -291,6 +292,10 @@ void MainWindow::active()
         if(recieve_succeed == 1){
             data_process();
             things_todo_after_received(&(*ite)); //相当于Ite_cur
+            if(ite->isAlarm){
+                isAlarm = true;
+                flashAlarm(ui->label_9,true);
+            }
         }
         else{
             terminal_disconnected(ui->tableWidget,&(*ite));
@@ -298,6 +303,7 @@ void MainWindow::active()
         }
     }
     ui->pushButton_3->setDisabled(false);
+    flashAlarm(ui->label_9,isAlarm);
 }
 // 将对应终端的信息设置成接受到的信息。
 void MainWindow::things_todo_after_received(terminal_struct *term)
@@ -308,8 +314,9 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     //qDebug()<<"湿度："<< term->Humidity<<" 温度："<< term->temprature <<endl;
     min_position = calmanfilter.find_min1(term->received_data,used_pixel);
     //qDebug()<< min_position <<endl;
-
     term->liq_height =  calmanfilter.liquid_pos(min_position);
+    term->isAlarm = (term->liq_height <= 10)? true:false;//是否需要报警
+    //alarmOrnot(term,ui->tableWidget);
     term->received_time = get_time();
     DataTOTableView(ui->tableWidget,term); //表格显示
     if(&(*whichtoDisplay) == term)
@@ -350,7 +357,7 @@ void MainWindow::sys_init()
 
     //连接数据库,初始化终端
     databasehandle = Database::getDatabaseP();
-    if(!databasehandle->creat_sql_connection())
+    if(!databasehandle->isopen() && !databasehandle->creat_sql_connection())
         return ;
     QList<uchar> term_id = databasehandle->get_lastNodes();
     //QString filePath =  "./node_info/node_info.txt";
@@ -384,5 +391,5 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
     int id = ui->tableWidget->item(row,0)->text().toInt();
     qDebug() << id;
     whichtoDisplay =  which_node(id,Nodes);
-     curve_update();
+    curve_update();
 }

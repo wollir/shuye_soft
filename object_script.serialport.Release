@@ -4,7 +4,6 @@ INPUT(
 ./release\calman.o
 ./release\someapp.o
 ./release\_login.o
-./release\encryption.o
 ./release\signin.o
 ./release\database.o
 ./release\qrc_picture.o

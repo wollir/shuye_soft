@@ -18,7 +18,6 @@ SOURCES += main.cpp\
     calman.cpp \
     someapp.cpp \
     _login.cpp \
-    encryption.cpp \
     signin.cpp \
     database.cpp
 
@@ -28,7 +27,6 @@ HEADERS  += mainwindow.h \
     someapp.h \
     gousi.h \
     _login.h \
-    encryption.h \
     signin.h \
     database.h
 
@@ -39,7 +37,9 @@ LIBS += -L‚ÄùD:\Qt\Qt5.7.0\5.7\mingw53_32\lib‚Ä-lqwt
 INCLUDEPATH += "D:\Qt\Qt5.7.0\5.7\mingw53_32\include\Qwt"
 include (D:\Qt\Qt5.7.0\qwt-6.1.2\qwt.prf)
 
-DISTFILES +=
+DISTFILES += \
+    alarm.gif \
+    gray_led.png
 
 RESOURCES += \
     picture.qrc

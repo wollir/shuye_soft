@@ -4,7 +4,8 @@
 #include<QTime>
 #include<QCoreApplication>
 #include<QTableWidgetItem>
-#include<QFile>
+#include<QLabel>
+#include<QMovie>
 extern QSerialPort serial;
 void MyDelay(unsigned int msec)
 {
@@ -48,7 +49,7 @@ QString get_time()
 void terminal_disconnected(QTableWidget *tab,terminal_struct *term)
 {
    int hang = LineInTableWidget(tab,term->id);
-    tab->setItem(hang ,2,new QTableWidgetItem(QIcon(":/red_led.png"), "掉线"));
+    tab->setItem(hang ,2,new QTableWidgetItem(QIcon(":/gray_led.png"), "掉线"));
 }
 void initTableView(QTableWidget *tab,QList<terminal_struct> *Nodes)
 {
@@ -59,7 +60,7 @@ void initTableView(QTableWidget *tab,QList<terminal_struct> *Nodes)
         tab->setRowCount(rowIndex + 1);//总行数增加1
         tab->setItem(i,0,new QTableWidgetItem(QString::number(ite->id)));
         tab->setItem(i,1,new QTableWidgetItem(QString::number(ite->liq_height,'f',1)+"mm"));
-        tab->setItem(i,2,new QTableWidgetItem(QIcon(":/red_led.png"), "离线"));
+        tab->setItem(i,2,new QTableWidgetItem(QIcon(":/gray_led.png"), "离线"));
         tab->setItem(i,3,new QTableWidgetItem(ite->received_time));
         tab->setItem(i,4,new QTableWidgetItem(QString::number(ite->temprature, 10, 1)));
         tab->setItem(i,5,new QTableWidgetItem(QString::number(ite->Humidity, 10, 1)));
@@ -71,7 +72,10 @@ void DataTOTableView(QTableWidget *tab, terminal_struct *term)
     //找出在第几行
    int hang = LineInTableWidget(tab,term->id);
     tab->setItem(hang,1,new QTableWidgetItem(QString::number(term->liq_height,'f',1)+"mm"));
-    tab->setItem(hang,2,new QTableWidgetItem(QIcon(":/led.png"), "在线"));
+    if(!term->isAlarm)
+        tab->setItem(hang,2,new QTableWidgetItem(QIcon(":/led.png"), "在线"));
+    else
+        tab->setItem(hang,2,new QTableWidgetItem(QIcon(":/red_led.png"), "警告"));
     tab->setItem(hang,3,new QTableWidgetItem(term->received_time));
     tab->setItem(hang,4,new QTableWidgetItem(QString::number(term->temprature, 10, 1)));
     tab->setItem(hang,5,new QTableWidgetItem(QString::number(term->Humidity, 10, 1)));
@@ -86,20 +90,6 @@ void cal_TempHumi(sht_data data,double &temp,double &humi)
     humi_raw |=data.humiL;
     temp = -45+175.0*temp_raw/65535;
     humi = 100.0*humi_raw/65535;
-}
-QVector<unsigned char> initNode(QString filename)
-{
-    QVector<unsigned char> re;
-    QFile file(filename);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        while (!file.atEnd()){
-            QByteArray line = file.readLine();
-            QString str(line);
-            uchar id = str.toInt();
-            re.push_back(id);
-        }
-        return re;
-    }
 }
 
 int LineInTableWidget(QTableWidget *tab, uchar id)
@@ -121,4 +111,14 @@ QList<terminal_struct> ::iterator which_node(uchar id, QList<terminal_struct> *N
             return ite;
     }
     return ite;
+}
+
+void flashAlarm(QLabel * lab,bool flash)
+{
+    QMovie *movie = new QMovie("alarm.gif");
+    lab->setMovie(movie);
+    if(flash)
+        movie->start();
+    else
+        movie->stop();
 }

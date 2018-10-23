@@ -2,8 +2,15 @@
 #include <QSqlQuery>
 #include <QSqlTableModel>
 #include <QDebug>
+#include <QList>
+
 Database::Database()
 {}
+
+bool Database::isopen()
+{
+    return  db.open();
+}
 Database *Database::getDatabaseP()
 {
     static Database dbase;
@@ -11,7 +18,7 @@ Database *Database::getDatabaseP()
 }
 bool Database::creat_sql_connection()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("localhost");
     db.setDatabaseName("shuye");
     db.setUserName("root");
@@ -22,7 +29,6 @@ bool Database::creat_sql_connection()
         return true;//qDebug()<<"success!";
     return false;
 }
-
 void Database::datatest()
 {
     QSqlQuery quety;
@@ -74,4 +80,14 @@ bool Database::dropOneNode(unsigned char id)
     bool res =  quety.exec("DELETE FROM last_node WHERE last_node='"+strID+"'");
     if(res)
         qDebug() << "删除成功";
+}
+
+bool Database::isValidUser(QString name, QString pwd)
+{
+    QSqlQuery quety;
+    quety.exec("select password from users where name=\""+name+"\"");
+    quety.next();
+    if( quety.value(0).toString() == pwd)
+        return true;
+    return false;
 }

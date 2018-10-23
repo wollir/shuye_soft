@@ -4,7 +4,6 @@ INPUT(
 ./debug\calman.o
 ./debug\someapp.o
 ./debug\_login.o
-./debug\encryption.o
 ./debug\signin.o
 ./debug\database.o
 ./debug\qrc_picture.o

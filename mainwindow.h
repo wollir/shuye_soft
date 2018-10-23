@@ -33,10 +33,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow() {
-        delete ui;
-
-    }
+    ~MainWindow() {  delete ui;    }
     QSerialPort serial;//串口实例
     QList<QSerialPortInfo> infos;
     QList<QSerialPortInfo> last_infos;

@@ -4,11 +4,10 @@
 #include <QWidget>
 #include <QVector>
 #include<QAbstractButton>
-#include"encryption.h"
 namespace Ui {
 class _Login;
 }
-
+class Database;
 class _Login : public QWidget
 {
     Q_OBJECT
@@ -21,6 +20,6 @@ private:
     Ui::_Login *ui;
     QVector<QPair<QString,QString>> users;
     QVector<int> key = {9,4,0,3,2,8}; //秘钥
-    encryption * encry;
+    Database *db;
 };
 #endif // _LOGIN_H
