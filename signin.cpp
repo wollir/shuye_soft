@@ -41,7 +41,7 @@ void SignIn::on_pushButton_clicked()
         ui->label_2->setText("Error!");
         return;
     }
-    uchar newid = str.toInt();
+    unsigned short newid = str.toInt();
     for(auto X:*IDs){
         if(X.id == newid){
             QMessageBox::warning(this,tr("警告"),tr("该节点已经存在!"),QMessageBox::Yes);
@@ -66,7 +66,7 @@ void SignIn::on_pushButton_clicked()
     db->addOneNode(newid);
     ui->label_2->setText("Succeed!");
 }
-int find_newidNum(QList<terminal_struct> *IDs,uchar newid)
+int find_newidNum(QList<terminal_struct> *IDs,u16 newid)
 {
     QList<terminal_struct>::iterator ite = IDs->begin();
     int index = 0;
@@ -85,7 +85,7 @@ void SignIn::on_pushButton_2_clicked()
         ui->label_2->setText("Error!");
         return;
     }
-    uchar newid = str.toInt();
+    u16 newid = str.toInt();
     int index = -1;
     int count = 0;
     for(auto X:*IDs){

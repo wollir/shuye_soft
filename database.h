@@ -13,9 +13,9 @@ public:
     static Database* getDatabaseP();
     bool creat_sql_connection();
     void datatest();
-    QList<unsigned char> get_lastNodes();
-    bool addOneNode(unsigned char id);
-    bool dropOneNode(unsigned char id);
+    QList<unsigned short> get_lastNodes();
+    bool addOneNode(unsigned short id);
+    bool dropOneNode(unsigned short id);
     bool isValidUser(QString name,QString pwd);
 };
 

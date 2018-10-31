@@ -25,7 +25,7 @@ EstimateCovariance +=(1-KalmanGain)*EstimateCovariance;
 //MeasureCovariance +=sqrt(1-KalmanGain)*MeasureCovariance;
 MeasureCovariance +=(1-KalmanGain)*MeasureCovariance;
 //?????
-    qDebug() << EstimateCovariance <<endl;
+    //qDebug() << EstimateCovariance <<endl;
 return EstimateValue;
 }
 //    for(int i = 0; i < real_receive_size; i++){    //阈值划分

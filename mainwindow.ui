@@ -17,8 +17,8 @@
    <widget class="QwtPlot" name="qwtPlot_2">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>50</y>
+      <x>10</x>
+      <y>30</y>
       <width>621</width>
       <height>341</height>
      </rect>
@@ -62,7 +62,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>打开串口</string>
+      <string>打开端口</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_2">
@@ -75,7 +75,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>关闭串口</string>
+      <string>关闭端口</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -88,7 +88,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>串口号  ：</string>
+      <string>端口号  ：</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -112,6 +112,9 @@
        <width>61</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="currentText">
+      <string>9600</string>
      </property>
      <item>
       <property name="text">
@@ -194,9 +197,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>630</x>
       <y>430</y>
-      <width>131</width>
+      <width>81</width>
       <height>221</height>
      </rect>
     </property>
@@ -240,9 +243,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>440</y>
-      <width>551</width>
-      <height>181</height>
+      <y>410</y>
+      <width>561</width>
+      <height>231</height>
      </rect>
     </property>
     <property name="focusPolicy">
@@ -277,7 +280,7 @@
     </attribute>
     <column>
      <property name="text">
-      <string>终端编号</string>
+      <string>病床号</string>
      </property>
     </column>
     <column>
@@ -428,7 +431,7 @@
       </rect>
      </property>
      <property name="text">
-      <string> </string>
+      <string/>
      </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>
@@ -451,14 +454,27 @@
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>390</y>
+      <x>720</x>
+      <y>380</y>
       <width>32</width>
       <height>32</height>
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>410</y>
+      <width>54</width>
+      <height>12</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>液位高度：</string>
     </property>
    </widget>
    <zorder>pushButton_6</zorder>
@@ -469,6 +485,7 @@
    <zorder>tableWidget</zorder>
    <zorder>groupBox_2</zorder>
    <zorder>label_9</zorder>
+   <zorder>label_10</zorder>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

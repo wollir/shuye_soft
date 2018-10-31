@@ -71,6 +71,7 @@ public:
     QLabel *label_7;
     QPushButton *pushButton_6;
     QLabel *label_9;
+    QLabel *label_10;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -82,7 +83,7 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         qwtPlot_2 = new QwtPlot(centralWidget);
         qwtPlot_2->setObjectName(QStringLiteral("qwtPlot_2"));
-        qwtPlot_2->setGeometry(QRect(0, 50, 621, 341));
+        qwtPlot_2->setGeometry(QRect(10, 30, 621, 341));
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
         groupBox->setGeometry(QRect(680, 20, 211, 151));
@@ -148,7 +149,7 @@ public:
 
         layoutWidget1 = new QWidget(centralWidget);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(600, 430, 131, 221));
+        layoutWidget1->setGeometry(QRect(630, 430, 81, 221));
         gridLayout_3 = new QGridLayout(layoutWidget1);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -187,7 +188,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(5, __qtablewidgetitem5);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setGeometry(QRect(30, 440, 551, 181));
+        tableWidget->setGeometry(QRect(30, 410, 561, 231));
         tableWidget->setFocusPolicy(Qt::NoFocus);
         tableWidget->setLayoutDirection(Qt::LeftToRight);
         tableWidget->setFrameShadow(QFrame::Sunken);
@@ -236,7 +237,10 @@ public:
         pushButton_6->setGeometry(QRect(800, 390, 75, 23));
         label_9 = new QLabel(centralWidget);
         label_9->setObjectName(QStringLiteral("label_9"));
-        label_9->setGeometry(QRect(690, 390, 32, 32));
+        label_9->setGeometry(QRect(720, 380, 32, 32));
+        label_10 = new QLabel(centralWidget);
+        label_10->setObjectName(QStringLiteral("label_10"));
+        label_10->setGeometry(QRect(600, 410, 54, 12));
         MainWindow->setCentralWidget(centralWidget);
         pushButton_6->raise();
         groupBox->raise();
@@ -246,6 +250,7 @@ public:
         tableWidget->raise();
         groupBox_2->raise();
         label_9->raise();
+        label_10->raise();
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
@@ -263,21 +268,22 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         groupBox->setTitle(QApplication::translate("MainWindow", "\347\253\257\345\217\243\346\216\247\345\210\266", 0));
         refresh_b->setText(QString());
-        pushButton->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\344\270\262\345\217\243", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "\345\205\263\351\227\255\344\270\262\345\217\243", 0));
-        label->setText(QApplication::translate("MainWindow", "\344\270\262\345\217\243\345\217\267  \357\274\232", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\347\253\257\345\217\243", 0));
+        pushButton_2->setText(QApplication::translate("MainWindow", "\345\205\263\351\227\255\347\253\257\345\217\243", 0));
+        label->setText(QApplication::translate("MainWindow", "\347\253\257\345\217\243\345\217\267  \357\274\232", 0));
         label_2->setText(QApplication::translate("MainWindow", "\346\263\242\347\211\271\347\216\207 \357\274\232", 0));
         comboBox->clear();
         comboBox->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "115200", 0)
          << QApplication::translate("MainWindow", "9600", 0)
         );
+        comboBox->setCurrentText(QApplication::translate("MainWindow", "9600", 0));
         label_3->setText(QApplication::translate("MainWindow", "\346\216\245\346\224\266", 0));
         label_4->setText(QApplication::translate("MainWindow", "0", 0));
         clear_receive->setText(QApplication::translate("MainWindow", "Clear", 0));
         label_8->setText(QApplication::translate("MainWindow", "MM", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\347\274\226\345\217\267", 0));
+        ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "\347\227\205\345\272\212\345\217\267", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "\346\266\262\351\235\242\344\275\215\347\275\256", 0));
         QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
@@ -297,6 +303,7 @@ public:
         label_7->setText(QString());
         pushButton_6->setText(QApplication::translate("MainWindow", "\346\263\250\345\206\214\347\273\210\347\253\257", 0));
         label_9->setText(QString());
+        label_10->setText(QApplication::translate("MainWindow", "\346\266\262\344\275\215\351\253\230\345\272\246\357\274\232", 0));
     } // retranslateUi
 
 };

@@ -34,31 +34,31 @@ void Database::datatest()
     QSqlQuery quety;
     quety.exec("select *from last_node");
     while(quety.next()){
-        uchar id = quety.value(0).toInt();
-        qDebug() << id;
+        uint16_t id = quety.value(0).toInt();
+        //qDebug() << id;
     }
 }
-QList<unsigned char> Database::get_lastNodes()
+QList<unsigned short> Database::get_lastNodes()
 {
-    QList<unsigned char> res;
+    QList<unsigned short> res;
     QSqlQuery quety;
     quety.exec("select *from last_node");
     while(quety.next()){
-        uchar id = quety.value(0).toInt();
+        unsigned short id = quety.value(0).toInt();
         res.push_back(id);
-        qDebug() << id;
+        //qDebug() << id;
     }
     return res;
 }
 
-bool Database::addOneNode(unsigned char id)
+bool Database::addOneNode(unsigned short id)
 {
     QSqlQuery quety;
     QString strID = QString::number(id);
     quety.exec("select count(*) from last_node where last_node='"+ strID +"'");
     quety.next();
     int re = quety.value(0).toInt();
-    qDebug() <<re;
+   // qDebug() <<re;
     if(re > 0){
         return false;
     }
@@ -67,7 +67,7 @@ bool Database::addOneNode(unsigned char id)
         qDebug() << "插入成功";
 }
 
-bool Database::dropOneNode(unsigned char id)
+bool Database::dropOneNode(unsigned short id)
 {
     QSqlQuery quety;
     QString strID = QString::number(id);
@@ -80,6 +80,7 @@ bool Database::dropOneNode(unsigned char id)
     bool res =  quety.exec("DELETE FROM last_node WHERE last_node='"+strID+"'");
     if(res)
         qDebug() << "删除成功";
+    return true;
 }
 
 bool Database::isValidUser(QString name, QString pwd)

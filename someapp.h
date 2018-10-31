@@ -3,7 +3,7 @@
 #include<QString>
 #include<QTableWidget>
 #include<QVector>
-
+typedef unsigned short u16;
 class QLabel;
 
 static QVector<uchar> active_key{69,82,0,0,0,50,0,15,66,64,0,0};  //控制 ICG SH的积分时间
@@ -19,7 +19,7 @@ typedef struct
 }sht_data;
 class terminal_struct{
 public:
-    uchar id;
+    unsigned short id;
     unsigned char addr_channle[3]; //结点，信道地址
     QVector<uchar> activat_cmd; //CCD传感器数据请求指令
     QVector<uchar> call_cmd;    //下位机登记指令
@@ -32,15 +32,18 @@ public:
     bool isAlarm;  //是否需要报警
     //int hang; //在tableWidget的第几行
     //public:
-    terminal_struct(uchar a):id(a){
+    terminal_struct(u16 a):id(a){
         call_cmd =call_terminal;
-        call_cmd[2] = a;
-        activat_cmd = active_key;
-        activat_cmd[10] = a;
+        call_cmd[2] = a>>8;
+        call_cmd[3] = a&0xff;
 
-        addr_channle[0] = 0;//地址高字节，没用
+        activat_cmd = active_key;
+        activat_cmd[10] = a>>8; //id先发高位，再发低位
+        activat_cmd[11] = a&0xff;
+
+        addr_channle[0] = a>>8;//地址高字节，没用
         addr_channle[1] = a;//地址低字节，= id
-        addr_channle[2] = 0x50;//信道,全用这个
+        addr_channle[2] = 0x17;//信道,全用这个
         received_time = "";
         isexist = 0;
         temprature = 0.0;
@@ -58,10 +61,10 @@ void MyDelay(unsigned int msec);
 QString get_time();
 void DataTOTableView(QTableWidget * tab, terminal_struct *term);  //当本节点的信息来到时的操作
 void initTableView(QTableWidget *tab,QList<terminal_struct> *Nodes);//根据数据库中的节点信息来初始化表
-int LineInTableWidget(QTableWidget *tab,uchar id);//节点id对应的是tablewidget的第几行
+int LineInTableWidget(QTableWidget *tab,u16 id);//节点id对应的是tablewidget的第几行
 
 void terminal_disconnected(QTableWidget *tab,terminal_struct *term);  //当节点没有回应时候的操作
 void cal_TempHumi(sht_data data,double &temp,double &humi);
-QList<terminal_struct> ::iterator which_node(uchar id, QList<terminal_struct> *Nodes); //找id对应的节点迭代器
+QList<terminal_struct> ::iterator which_node(u16 id, QList<terminal_struct> *Nodes); //找id对应的节点迭代器
 void flashAlarm(QLabel * lab,bool flash);
 #endif // SOMEAPP_H

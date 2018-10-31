@@ -92,7 +92,7 @@ void cal_TempHumi(sht_data data,double &temp,double &humi)
     humi = 100.0*humi_raw/65535;
 }
 
-int LineInTableWidget(QTableWidget *tab, uchar id)
+int LineInTableWidget(QTableWidget *tab, u16 id)
 {
     int i = 0;
     for(; i < tab->rowCount();i++){
@@ -103,7 +103,7 @@ int LineInTableWidget(QTableWidget *tab, uchar id)
     return i;
 }
 
-QList<terminal_struct> ::iterator which_node(uchar id, QList<terminal_struct> *Nodes)
+QList<terminal_struct> ::iterator which_node(u16 id, QList<terminal_struct> *Nodes)
 {
     QList<terminal_struct> ::iterator ite = nullptr;
     for(ite = Nodes->begin();ite != Nodes->end();ite++){
