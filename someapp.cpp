@@ -6,6 +6,7 @@
 #include<QTableWidgetItem>
 #include<QLabel>
 #include<QMovie>
+#include<QDebug>
 extern QSerialPort serial;
 void MyDelay(unsigned int msec)
 {

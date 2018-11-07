@@ -4,7 +4,7 @@
 #include<QTime>
 #include"signin.h"
 #include"database.h"
-#define wireless 1
+//#define wireless 1
 
 const int real_receive_size = 60;
 const int used_pixel = 60;
@@ -53,14 +53,14 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
         //ui->textEdit_2->setText(current_text + re.toHex());
         if((re[0] == 0xfe) && (re[1] == 0x01))//数据
         {
-            //Ite_cur = which_node(re[real_receive_size+2+4],Nodes);
             recieve_succeed = 1;   //按钮事件等待这个标志来处理信息
             //qDebug() << "recieve_succeed";
             re.remove(0,2); //去帧头
         }
         else if((re[0] == 0xff) && (re[1] == 0x02))//回应，call terminal
         {
-            if(re[2]*256+re[3] == Ite_cur->id )//确认是当前终端的数据
+            //qDebug() <<"recieve from id:"<< (uint8_t)re[2]*256+(uint8_t)re[3];
+            if((uint8_t)re[2]*256+(uint8_t)re[3] == Ite_cur->id )//确认是当前终端的数据
                 Ite_cur->isexist = true;
             re = 0;
         }
@@ -377,7 +377,12 @@ void MainWindow::sys_init()
     //auto term_id = initNode(filePath);
     QList<u16>::iterator ite = term_id.begin();
     for(; ite != term_id.end();ite++){
-        Nodes->push_back(terminal_struct(*ite));
+        auto temp = terminal_struct(*ite);
+        //初始化节点的device_id 和 api_key
+        auto deviceid_api = databasehandle->get_device_info(temp.id);
+        temp.device_id = deviceid_api.first;
+        temp.api_key = deviceid_api.second;
+        Nodes->push_back(temp);
     }
     initTableView(ui->tableWidget,Nodes);
     // 刚开始 关闭串口，激活，自动激活 都应失效。

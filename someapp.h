@@ -3,6 +3,7 @@
 #include<QString>
 #include<QTableWidget>
 #include<QVector>
+#include"database.h"
 typedef unsigned short u16;
 class QLabel;
 
@@ -30,8 +31,10 @@ public:
     double temprature; //温湿度
     double Humidity; //温湿度
     bool isAlarm;  //是否需要报警
+    QString api_key;
+    QString device_id;
     //int hang; //在tableWidget的第几行
-    //public:
+
     terminal_struct(u16 a):id(a){
         call_cmd =call_terminal;
         call_cmd[2] = a>>8;

@@ -6,6 +6,7 @@ INPUT(
 ./release\_login.o
 ./release\signin.o
 ./release\database.o
+./release\onenet_http.o
 ./release\qrc_picture.o
 ./release\moc_mainwindow.o
 ./release\moc__login.o

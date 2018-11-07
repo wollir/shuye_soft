@@ -114,7 +114,7 @@
       </rect>
      </property>
      <property name="currentText">
-      <string>9600</string>
+      <string>115200</string>
      </property>
      <item>
       <property name="text">
@@ -448,7 +448,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>注册终端</string>
+     <string>终端管理</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_9">

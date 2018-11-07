@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 QT       += serialport
 QT       += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     someapp.cpp \
     _login.cpp \
     signin.cpp \
-    database.cpp
+    database.cpp \
+    onenet_http.cpp
 
 HEADERS  += mainwindow.h \
     calman.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     gousi.h \
     _login.h \
     signin.h \
-    database.h
+    database.h \
+    onenet_http.h
 
 FORMS    += mainwindow.ui \
     _login.ui \

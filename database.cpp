@@ -58,7 +58,7 @@ bool Database::addOneNode(unsigned short id)
     quety.exec("select count(*) from last_node where last_node='"+ strID +"'");
     quety.next();
     int re = quety.value(0).toInt();
-   // qDebug() <<re;
+    // qDebug() <<re;
     if(re > 0){
         return false;
     }
@@ -91,4 +91,18 @@ bool Database::isValidUser(QString name, QString pwd)
     if( quety.value(0).toString() == pwd)
         return true;
     return false;
+}
+//在device_info表中获取当前id对应的device_id 和 api_key
+QPair<QString, QString> Database::get_device_info(uint16_t id)
+{
+    QPair<QString, QString> id_api;
+    QSqlQuery quety;
+    quety.exec("select device_id,api_key from device_info where id=\""+QString::number(id)+"\"");
+    if(quety.size() != 1)
+        return {"",""};
+
+    quety.next();
+    id_api.first = quety.value(0).toString();
+    id_api.second = quety.value(1).toString();
+    return id_api;
 }

@@ -277,7 +277,7 @@ public:
          << QApplication::translate("MainWindow", "115200", 0)
          << QApplication::translate("MainWindow", "9600", 0)
         );
-        comboBox->setCurrentText(QApplication::translate("MainWindow", "9600", 0));
+        comboBox->setCurrentText(QApplication::translate("MainWindow", "115200", 0));
         label_3->setText(QApplication::translate("MainWindow", "\346\216\245\346\224\266", 0));
         label_4->setText(QApplication::translate("MainWindow", "0", 0));
         clear_receive->setText(QApplication::translate("MainWindow", "Clear", 0));
@@ -301,7 +301,7 @@ public:
         label_5->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273\345\221\250\346\234\237\357\274\232", 0));
         pushButton_4->setText(QApplication::translate("MainWindow", "\350\207\252\345\212\250\346\277\200\346\264\273", 0));
         label_7->setText(QString());
-        pushButton_6->setText(QApplication::translate("MainWindow", "\346\263\250\345\206\214\347\273\210\347\253\257", 0));
+        pushButton_6->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\347\256\241\347\220\206", 0));
         label_9->setText(QString());
         label_10->setText(QApplication::translate("MainWindow", "\346\266\262\344\275\215\351\253\230\345\272\246\357\274\232", 0));
     } // retranslateUi
