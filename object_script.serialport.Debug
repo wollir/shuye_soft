@@ -11,4 +11,5 @@ INPUT(
 ./debug\moc_mainwindow.o
 ./debug\moc__login.o
 ./debug\moc_signin.o
+./debug\moc_onenet_http.o
 );

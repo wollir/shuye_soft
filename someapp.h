@@ -20,7 +20,7 @@ typedef struct
 }sht_data;
 class terminal_struct{
 public:
-    unsigned short id;
+    uint16_t id;
     unsigned char addr_channle[3]; //结点，信道地址
     QVector<uchar> activat_cmd; //CCD传感器数据请求指令
     QVector<uchar> call_cmd;    //下位机登记指令

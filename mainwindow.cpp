@@ -4,6 +4,7 @@
 #include<QTime>
 #include"signin.h"
 #include"database.h"
+#include"onenet_http.h"
 //#define wireless 1
 
 const int real_receive_size = 60;
@@ -15,7 +16,8 @@ sht_data temp_humi;
 unsigned char  yuzhi = 0;
 uchar min_position = 0;
 u16 current_row = 0; //当前tablewigit的行数
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),Nodes(new QList<terminal_struct> )
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+  ,Nodes(new QList<terminal_struct>)
 {
     ui->setupUi(this);
     sys_init();
@@ -334,6 +336,17 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     DataTOTableView(ui->tableWidget,term); //表格显示
     if(&(*whichtoDisplay) == term)
         curve_update();
+    if(term->device_id.size()){ //在云上有
+        //http_post->run(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
+//        QThread *mythread = new QThread;
+//        onenet_http *temp = new onenet_http(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
+//        temp->moveToThread(mythread);
+//        connect(mythread, SIGNAL(started()), temp, SLOT(run()));
+//        mythread->start();
+
+        onenet_http *temp = new onenet_http(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
+        temp->start();
+    }
 }
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {

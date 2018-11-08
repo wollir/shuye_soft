@@ -274,10 +274,10 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "\346\263\242\347\211\271\347\216\207 \357\274\232", 0));
         comboBox->clear();
         comboBox->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "115200", 0)
          << QApplication::translate("MainWindow", "9600", 0)
+         << QApplication::translate("MainWindow", "115200", 0)
         );
-        comboBox->setCurrentText(QApplication::translate("MainWindow", "115200", 0));
+        comboBox->setCurrentText(QApplication::translate("MainWindow", "9600", 0));
         label_3->setText(QApplication::translate("MainWindow", "\346\216\245\346\224\266", 0));
         label_4->setText(QApplication::translate("MainWindow", "0", 0));
         clear_receive->setText(QApplication::translate("MainWindow", "Clear", 0));
