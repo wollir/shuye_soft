@@ -30,13 +30,13 @@ void SignIn::freshListView()
         num.push_back(QString::number(X.id));
     }
     QStringListModel *model = new QStringListModel(num);
-    ui->listView->setModel(model);
+    ui->listView_2->setModel(model);
 }
 //添加节点
-void SignIn::on_pushButton_clicked()
+void SignIn::on_pushButton_3_clicked()
 {
     //先看有没有
-    QString str = ui->lineEdit->text();
+    QString str = ui->lineEdit_2->text();
     if(str.isEmpty()){
         ui->label_2->setText("Error!");
         return;
@@ -45,7 +45,7 @@ void SignIn::on_pushButton_clicked()
     for(auto X:*IDs){
         if(X.id == newid){
             QMessageBox::warning(this,tr("警告"),tr("该节点已经存在!"),QMessageBox::Yes);
-            ui->lineEdit->clear();
+            ui->lineEdit_2->clear();
             ui->label_2->setText("Error!");
             return;
         }
@@ -78,9 +78,9 @@ int find_newidNum(QList<terminal_struct> *IDs,u16 newid)
     return -1;
 }
 //删除节点
-void SignIn::on_pushButton_2_clicked()
+void SignIn::on_pushButton_4_clicked()
 {
-    QString str = ui->lineEdit->text();
+    QString str = ui->lineEdit_2->text();
     if(str.isEmpty()){
         ui->label_2->setText("Error!");
         return;
@@ -109,7 +109,7 @@ void SignIn::on_pushButton_2_clicked()
     ui->label_2->setText("Succeed!");
 }
 
-void SignIn::on_listView_doubleClicked(const QModelIndex &index)
+void SignIn::on_listView_2_doubleClicked(const QModelIndex &index)
 {
-    ui->lineEdit->setText(index.data().toString());
+    ui->lineEdit_2->setText(index.data().toString());
 }

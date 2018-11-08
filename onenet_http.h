@@ -7,7 +7,8 @@
 #include<QMutexLocker>
 class QNetworkAccessManager;
 class QNetworkReply;
-class onenet_http:public QThread
+//更新数据用
+class onenetPostData:public QThread
 {
     Q_OBJECT
 private:
@@ -21,13 +22,13 @@ private:
     float liquid_hight;
 
 private slots:
-    void finishedSlot(QNetworkReply *reply);
+    void post_finishedSlot(QNetworkReply *reply);
 
 signals:
     void all_job_done();
 public:
-    onenet_http(QString p_device_id,QString p_api_key,float p_temp,float p_humidity,float p_liquid_hight);
-    ~onenet_http(){
+    onenetPostData(QString p_device_id,QString p_api_key,float p_temp,float p_humidity,float p_liquid_hight);
+    ~onenetPostData(){
         //delete nam;
         //delete reply;
     }
@@ -35,5 +36,24 @@ public:
     void run();
     static QMutex mut;
 };
+class createNewDevice:public QThread
+{
+    Q_OBJECT
+public:
+    createNewDevice(QString devicename);
+        void run();
+        void getNewDevice();
 
+        QString accept_deviceid;
+        bool isover;
+private slots:
+    void post_finishedSlot(QNetworkReply *reply);
+private:
+    QString device_name;
+    QNetworkAccessManager *nam;
+    QNetworkReply* reply;
+
+    static QMutex zhuce_mut;
+
+};
 #endif // ONENET_HTTP_H

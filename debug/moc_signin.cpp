@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_SignIn_t {
     QByteArrayData data[6];
-    char stringdata0[86];
+    char stringdata0[90];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,16 +30,16 @@ struct qt_meta_stringdata_SignIn_t {
 static const qt_meta_stringdata_SignIn_t qt_meta_stringdata_SignIn = {
     {
 QT_MOC_LITERAL(0, 0, 6), // "SignIn"
-QT_MOC_LITERAL(1, 7, 21), // "on_pushButton_clicked"
-QT_MOC_LITERAL(2, 29, 0), // ""
-QT_MOC_LITERAL(3, 30, 23), // "on_pushButton_2_clicked"
-QT_MOC_LITERAL(4, 54, 25), // "on_listView_doubleClicked"
-QT_MOC_LITERAL(5, 80, 5) // "index"
+QT_MOC_LITERAL(1, 7, 23), // "on_pushButton_3_clicked"
+QT_MOC_LITERAL(2, 31, 0), // ""
+QT_MOC_LITERAL(3, 32, 23), // "on_pushButton_4_clicked"
+QT_MOC_LITERAL(4, 56, 27), // "on_listView_2_doubleClicked"
+QT_MOC_LITERAL(5, 84, 5) // "index"
 
     },
-    "SignIn\0on_pushButton_clicked\0\0"
-    "on_pushButton_2_clicked\0"
-    "on_listView_doubleClicked\0index"
+    "SignIn\0on_pushButton_3_clicked\0\0"
+    "on_pushButton_4_clicked\0"
+    "on_listView_2_doubleClicked\0index"
 };
 #undef QT_MOC_LITERAL
 
@@ -75,9 +75,9 @@ void SignIn::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         SignIn *_t = static_cast<SignIn *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->on_pushButton_clicked(); break;
-        case 1: _t->on_pushButton_2_clicked(); break;
-        case 2: _t->on_listView_doubleClicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
+        case 0: _t->on_pushButton_3_clicked(); break;
+        case 1: _t->on_pushButton_4_clicked(); break;
+        case 2: _t->on_listView_2_doubleClicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
         default: ;
         }
     }

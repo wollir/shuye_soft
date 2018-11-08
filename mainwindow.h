@@ -23,7 +23,7 @@
 
 //前置类声明
 class Database ;
-class onenet_http;
+class onenetPostData;
 namespace Ui {
 class MainWindow;
 }

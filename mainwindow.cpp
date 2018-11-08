@@ -336,22 +336,24 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     DataTOTableView(ui->tableWidget,term); //表格显示
     if(&(*whichtoDisplay) == term)
         curve_update();
-    if(term->device_id.size()){ //在云上有
-        //http_post->run(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
-//        QThread *mythread = new QThread;
-//        onenet_http *temp = new onenet_http(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
-//        temp->moveToThread(mythread);
-//        connect(mythread, SIGNAL(started()), temp, SLOT(run()));
-//        mythread->start();
-
-        onenet_http *temp = new onenet_http(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
-        temp->start();
+    if(term->device_id.size()){ //在云上有注册
+        onenetPostData *temp_thread = new onenetPostData(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
+        temp_thread->start();
     }
+
+    //增加节点
+    createNewDevice *Cre_dev = new createNewDevice("ttest");
+    Cre_dev->start();
+    while (!Cre_dev->isover) {
+        ;
+    }
+    qDebug()<<Cre_dev->accept_deviceid;
+
 }
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
-    if(index == 0)      serial.setBaudRate(QSerialPort::Baud115200);
-    else                serial.setBaudRate(QSerialPort::Baud9600);
+    if(index == 0)      serial.setBaudRate(QSerialPort::Baud9600);
+    else                serial.setBaudRate(QSerialPort::Baud115200);
 }
 void MainWindow::sys_init()
 {
