@@ -66,7 +66,7 @@ public:
     QPushButton *pushButton_6;
     QLabel *label_9;
     QLabel *label_10;
-    QWidget *widget;
+    QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout_3;
     QwtThermo *Thermo;
@@ -184,10 +184,10 @@ public:
         pushButton_3->setGeometry(QRect(120, 70, 75, 23));
         pushButton_5 = new QPushButton(groupBox_2);
         pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
-        pushButton_5->setGeometry(QRect(150, 30, 41, 23));
+        pushButton_5->setGeometry(QRect(40, 30, 151, 23));
         comboBox_3 = new QComboBox(groupBox_2);
         comboBox_3->setObjectName(QStringLiteral("comboBox_3"));
-        comboBox_3->setGeometry(QRect(70, 30, 69, 22));
+        comboBox_3->setGeometry(QRect(40, 70, 69, 22));
         label_6 = new QLabel(groupBox_2);
         label_6->setObjectName(QStringLiteral("label_6"));
         label_6->setGeometry(QRect(140, 120, 20, 20));
@@ -218,10 +218,10 @@ public:
         label_10 = new QLabel(centralWidget);
         label_10->setObjectName(QStringLiteral("label_10"));
         label_10->setGeometry(QRect(600, 410, 54, 12));
-        widget = new QWidget(centralWidget);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(630, 430, 81, 221));
-        verticalLayout = new QVBoxLayout(widget);
+        layoutWidget1 = new QWidget(centralWidget);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(630, 430, 81, 221));
+        verticalLayout = new QVBoxLayout(layoutWidget1);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
@@ -229,7 +229,7 @@ public:
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        Thermo = new QwtThermo(widget);
+        Thermo = new QwtThermo(layoutWidget1);
         Thermo->setObjectName(QStringLiteral("Thermo"));
         Thermo->setUpperBound(50);
         Thermo->setAlarmEnabled(true);
@@ -251,7 +251,7 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer);
 
-        label_8 = new QLabel(widget);
+        label_8 = new QLabel(layoutWidget1);
         label_8->setObjectName(QStringLiteral("label_8"));
 
         horizontalLayout_2->addWidget(label_8);
@@ -312,8 +312,8 @@ public:
         QTableWidgetItem *___qtablewidgetitem5 = tableWidget->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QApplication::translate("MainWindow", "\345\256\244\345\206\205\346\271\277\345\272\246", 0));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\210\347\253\257\346\216\247\345\210\266", 0));
-        pushButton_3->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273CCD", 0));
-        pushButton_5->setText(QApplication::translate("MainWindow", "\346\211\253\346\217\217", 0));
+        pushButton_3->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273\347\273\210\347\253\257", 0));
+        pushButton_5->setText(QApplication::translate("MainWindow", "\346\211\253\346\217\217\347\273\210\347\253\257", 0));
         label_6->setText(QApplication::translate("MainWindow", "S", 0));
         label_5->setText(QApplication::translate("MainWindow", "\346\277\200\346\264\273\345\221\250\346\234\237\357\274\232", 0));
         pushButton_4->setText(QApplication::translate("MainWindow", "\350\207\252\345\212\250\346\277\200\346\264\273", 0));

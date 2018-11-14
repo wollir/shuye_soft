@@ -17,7 +17,7 @@ unsigned char  yuzhi = 0;
 uchar min_position = 0;
 u16 current_row = 0; //当前tablewigit的行数
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
-  ,Nodes(new QList<terminal_struct>)
+  ,Nodes(new QList<terminal_struct>),which_active("all")
 {
     ui->setupUi(this);
     sys_init();
@@ -162,7 +162,11 @@ void MainWindow::on_comboBox_2_currentTextChanged(const QString &arg1)
 }
 
 void MainWindow::on_pushButton_3_clicked()   //激活按钮
-{   active();}
+{
+    ui->pushButton_3->setDisabled(true);
+    active();
+    ui->pushButton_3->setDisabled(false);
+}
 void MainWindow::on_pushButton_clicked()// 打开串口
 {
     serial.close();
@@ -249,15 +253,16 @@ void MainWindow::call_for_terminal() //这里发，serialread 收
             ui->comboBox_3->addItem(QString::number(ite->id));
         }
         //延时一会，避免相互影响
-        _Timer = QTime::currentTime().addMSecs(100);
+       /* _Timer = QTime::currentTime().addMSecs(100);
         while( QTime::currentTime() < _Timer)
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);*/
     }
 }
 void MainWindow::on_pushButton_5_clicked()   //扫描
 {
     if(serial.isOpen()){
         ui->comboBox_3->clear();
+        ui->comboBox_3->addItem("all");//代表全部显示
         ui->groupBox_2->setDisabled(true);
         call_for_terminal();
         ui->groupBox_2->setDisabled(false);
@@ -272,19 +277,26 @@ void MainWindow::on_refresh_b_clicked()
 }
 void MainWindow::on_comboBox_3_currentTextChanged(const QString &arg1)
 {
-    whichtoDisplay = which_node(arg1.toInt(),Nodes);
+    //whichtoDisplay = which_node(arg1.toInt(),Nodes);
+    which_active = arg1;
 }
 void MainWindow::active()
 {
     bool isAlarm = false;
-    ui->pushButton_3->setDisabled(true);
+
     static int all_data_times = 0;
     all_data_times++;
     QList<terminal_struct> ::iterator ite =Nodes->begin();
+    bool isAllDisplay = false;
+    if(which_active == "all")
+        isAllDisplay= true;
+
     for(; ite != Nodes->end(); ite++)
     {
         Ite_cur = ite;
         if(!ite->isexist)//当前节点不存在
+            continue;
+        if(!isAllDisplay && which_active.toInt() != ite->id)
             continue;
         recieve_succeed = 0;
         serial.clear();
@@ -313,13 +325,11 @@ void MainWindow::active()
             re.clear();
         }
         //延时一会，避免相互影响
-        _Timer = QTime::currentTime().addMSecs(100);
+       /* _Timer = QTime::currentTime().addMSecs(100);
         while( QTime::currentTime() < _Timer)
-            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);*/
     }
-    if(!aoto_active_statues)
-        ui->pushButton_3->setDisabled(false);
-    flashAlarm(ui->label_9,isAlarm);
+    //flashAlarm(ui->label_9,isAlarm);
 }
 // 将对应终端的信息设置成接受到的信息。
 void MainWindow::things_todo_after_received(terminal_struct *term)
@@ -393,6 +403,7 @@ void MainWindow::sys_init()
         Nodes->push_back(temp);
     }
     initTableView(ui->tableWidget,Nodes);
+    whichtoDisplay = Nodes->begin();
     // 刚开始 关闭串口，激活，自动激活 都应失效。
     ui->pushButton_2->setDisabled(true);
     ui->pushButton_3->setDisabled(true);

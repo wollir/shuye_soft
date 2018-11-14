@@ -105,6 +105,8 @@ private:
     bool aoto_active_statues = 0; //自动激活 按键的状态
     int flash_secend = 2;//刷新的秒数
     int timer_divide_active = 0;
+    QString which_active; //combobox_3选择的要激活的终端
+
     //测试下位机存在与否
     QList<terminal_struct> *Nodes;
     Database *databasehandle;
