@@ -57,7 +57,6 @@ public:
     explicit terminal_struct(){}
 };
 
-
 void show_error();
 unsigned char data_aver(unsigned char* data, int size);
 void MyDelay(unsigned int msec);

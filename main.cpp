@@ -2,11 +2,11 @@
 #include <QApplication>
 #include"_login.h"
 
-//#define  NEEDLOG
+#define  NEEDLOG 0
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-#ifndef NEEDLOG
+#if !NEEDLOG
     MainWindow *m = new MainWindow;
     m->show();
 #else

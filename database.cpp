@@ -3,7 +3,7 @@
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QList>
-
+#include<QMap>
 Database::Database()
 {}
 
@@ -51,6 +51,51 @@ QList<unsigned short> Database::get_lastNodes()
     return res;
 }
 
+QMap<uint16_t,QString> Database::get_online_device()
+{
+    QMap<uint16_t,QString> res;
+    QSqlQuery quety;
+    quety.exec("select id,device_id from device_info");
+    while(quety.next()){
+        unsigned short id = quety.value(0).toInt();
+        QString device_id = quety.value(1).toString();
+        res[id] = device_id;
+        //qDebug() << id <<device_id;
+    }
+    return res;
+}
+
+bool Database::DeleteFromDeviceinfo(QString id)
+{
+    QSqlQuery quety;
+    bool res =  quety.exec("DELETE FROM device_info WHERE id='"+id+"'");
+    if(!res){
+        qDebug() << "删除失败";
+        return false;
+    }
+    qDebug() << "device_info 删除成功";
+    return true;
+}
+bool Database::addto_deviceinfo(QString strID,QString deviceid)
+{
+    QSqlQuery quety;
+    quety.exec("select * from device_info where id="+ strID);
+    quety.next();
+    int re = quety.value(0).toInt();
+    if(re > 0){
+         qDebug() <<"mysql already has";
+        return false;
+    }
+    QString tt = "insert into device_info values(" + strID +",'"+ deviceid +"',' ')";
+    qDebug() << tt;
+    bool res =  quety.exec(tt);
+
+    if(res){
+        qDebug() << "插入成功";
+        return true;
+    }
+    return false;
+}
 bool Database::addOneNode(unsigned short id)
 {
     QSqlQuery quety;

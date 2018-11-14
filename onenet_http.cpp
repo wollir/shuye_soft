@@ -6,8 +6,9 @@
 #include<QMutex>
 #include<QJsonObject>
 #include<QJsonDocument>
-const QString ZHUCE_url = "http://api.heclouds.com/devices";
-const QString ZHUCE_PROTOCAL = "MQTT";
+
+
+extern QMutex create_suss; //用来等待远程创建节点成功，与signin.cpp共用
 QString now;
 QMutex onenetPostData::mut;
 QMutex createNewDevice::zhuce_mut;
@@ -20,7 +21,7 @@ void onenetPostData::post_data() //推送数据上云
 {
     nam = new QNetworkAccessManager;
     QObject::connect(nam, SIGNAL(finished(QNetworkReply*)),this, SLOT(post_finishedSlot(QNetworkReply*)));
-    QObject::connect(this,SIGNAL(all_job_done()),this,SLOT(deleteLater())); //完了释放对象
+   // QObject::connect(this,SIGNAL(all_job_done()),this,SLOT(deleteLater())); //完了释放对象
 
     if(!mut.tryLock(10000)){
         qDebug() <<device_id<<"获取锁失败";
@@ -50,41 +51,83 @@ void onenetPostData::run()
 }
 void onenetPostData::post_finishedSlot(QNetworkReply *reply)
 {
-    if (reply->error() == QNetworkReply::NoError){
+    if (reply->error() != QNetworkReply::NoError){
         QByteArray bytes = reply->readAll();  // bytes
         //QString string(bytes); // string
         QString string = QString::fromUtf8(bytes);
         qDebug() << string;
+         mut.unlock();
+         return;
     }
     qDebug() <<now<<"gone!";
     mut.unlock();
     this->exit(0);
-    while(this->isRunning())
-        ;
-    emit all_job_done();
+//    while(this->isRunning())
+//        ;
+    //emit all_job_done();
+   // this->deleteLater();
 }
 //---------------------------------------------------------------------------------
 
-createNewDevice::createNewDevice(QString devname):accept_deviceid(""),device_name(devname)
+createNewDevice::createNewDevice(functionType type,QString devname):accept_deviceid("")
+  ,device_name(devname),mytype(type),issuccess(false)
 {
 }
 
+
 void createNewDevice::run()
 {
-    getNewDevice();
-    exec();
+    if(mytype == AddNewTerm){
+        getNewDevice();
+
+    }else if(mytype == DeleteTerm){
+        DeleteDevice();
+    }
+    this->exec();
+}
+void createNewDevice::DeleteDevice(){
+
+    nam = new QNetworkAccessManager;
+    QObject::connect(nam, SIGNAL(finished(QNetworkReply*)),this, SLOT(delete_finishedSlot(QNetworkReply*)),Qt::DirectConnection);
+
+    if(!zhuce_mut.tryLock(5000)){
+        qDebug() <<"获取删除锁失败";
+        return;
+    }
+    QUrl url(DELETE_URL+device_name);
+    QNetworkRequest request(url);
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, ("text/html; charset=utf-8"));
+    request.setRawHeader(QByteArray("api-key"),MASTER_APIKEY.toLatin1());
+
+    reply = nam->deleteResource(request);
+}
+
+void createNewDevice::delete_finishedSlot(QNetworkReply *reply)
+{
+    if (reply->error() != QNetworkReply::NoError){
+        qDebug() << "删除失败";
+        create_suss.unlock();
+        zhuce_mut.unlock();
+        return;
+    }
+    reply->deleteLater();
+    zhuce_mut.unlock();
+    create_suss.unlock();
+    issuccess = true;
+    this->exit(0);
 }
 
 void createNewDevice::getNewDevice()
 {
+
     nam = new QNetworkAccessManager;
-    QObject::connect(nam, SIGNAL(finished(QNetworkReply*)),this, SLOT(post_finishedSlot(QNetworkReply*)));
+    QObject::connect(nam, SIGNAL(finished(QNetworkReply*)),this, SLOT(post_finishedSlot(QNetworkReply*)),Qt::DirectConnection);
 
     if(!zhuce_mut.tryLock(5000)){
         qDebug() <<"获取注册锁失败";
         return;
     }
-
     QUrl url(ZHUCE_url);
     QNetworkRequest request(url);
     QJsonObject obj;
@@ -103,32 +146,38 @@ void createNewDevice::getNewDevice()
 void createNewDevice::post_finishedSlot(QNetworkReply *reply)
 {
     qDebug() <<"finished";
+
     QByteArray bytes = reply->readAll();  // bytes
     QString str = QString::fromUtf8(bytes);
-    qDebug() << str;
+    //qDebug() << str;
     QJsonParseError jsonError;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(str.toLatin1(), &jsonError);
+    if(jsonError.error != QJsonParseError::NoError){
+        qDebug() << "error in post_finishedSlot";
+        zhuce_mut.unlock();
+        create_suss.unlock();
+        return;
+    }
     //解析json数据
     QString res_id = "";
-    if(jsonError.error == QJsonParseError::NoError)
+    if(jsonDoc.isObject())
     {
-        if(jsonDoc.isObject())
-        {
-            QJsonObject obj = jsonDoc.object();
+        QJsonObject obj = jsonDoc.object();
 
-            if(obj.contains("data"))
-            {
-                QJsonValue value= obj.take("data");
-                qDebug() <<value;
-                QJsonObject dataObj = value.toObject();
-                if(dataObj.contains("device_id")){
-                     res_id =dataObj.take("device_id").toString();
-                }
+        if(obj.contains("data"))
+        {
+            QJsonValue value= obj.take("data");
+            // qDebug() <<value;
+            QJsonObject dataObj = value.toObject();
+            if(dataObj.contains("device_id")){
+                res_id =dataObj.take("device_id").toString();
             }
         }
     }
     accept_deviceid =  res_id;
-    isover = true;
+    qDebug() << "accept_deviceid"<<accept_deviceid;
     zhuce_mut.unlock();
+    create_suss.unlock();
     reply->deleteLater();
+    this->exit(0);
 }

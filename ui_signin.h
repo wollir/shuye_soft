@@ -14,7 +14,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -22,6 +21,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSplitter>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -29,74 +29,125 @@ QT_BEGIN_NAMESPACE
 class Ui_SignIn
 {
 public:
-    QGroupBox *groupBox;
-    QListView *listView;
+    QTabWidget *tabWidget_2;
+    QWidget *tab1;
+    QWidget *layoutWidget_4;
+    QGridLayout *gridLayout_4;
+    QSpacerItem *verticalSpacer_8;
+    QPushButton *pushButton_4;
+    QPushButton *pushButton_3;
+    QSpacerItem *horizontalSpacer_5;
+    QSplitter *splitter_4;
+    QLabel *label_6;
+    QLineEdit *lineEdit_2;
+    QSpacerItem *verticalSpacer_9;
+    QSpacerItem *verticalSpacer_2;
+    QListView *listView_2;
+    QLabel *label_2;
+    QWidget *tab2;
+    QLabel *label_3;
+    QListView *listView_3;
     QWidget *layoutWidget_3;
     QGridLayout *gridLayout_3;
-    QSpacerItem *verticalSpacer_5;
-    QSpacerItem *horizontalSpacer_4;
     QPushButton *pushButton_5;
-    QSpacerItem *verticalSpacer_6;
-    QPushButton *pushButton_6;
+    QSpacerItem *horizontalSpacer_4;
     QSplitter *splitter_3;
     QLabel *label_5;
     QLineEdit *lineEdit_3;
     QSpacerItem *verticalSpacer_7;
-    QLabel *label_3;
-    QGroupBox *groupBox_2;
-    QListView *listView_2;
-    QWidget *layoutWidget_2;
-    QGridLayout *gridLayout_2;
-    QSpacerItem *verticalSpacer_3;
-    QSpacerItem *horizontalSpacer_3;
-    QPushButton *pushButton_3;
-    QSpacerItem *verticalSpacer_2;
-    QPushButton *pushButton_4;
-    QSplitter *splitter_2;
-    QLabel *label_4;
-    QLineEdit *lineEdit_2;
-    QSpacerItem *verticalSpacer_4;
-    QLabel *label_2;
+    QSpacerItem *verticalSpacer_6;
+    QSpacerItem *verticalSpacer;
+    QPushButton *pushButton_6;
+    QLabel *label_7;
+    QLineEdit *lineEdit_4;
 
     void setupUi(QWidget *SignIn)
     {
         if (SignIn->objectName().isEmpty())
             SignIn->setObjectName(QStringLiteral("SignIn"));
-        SignIn->resize(504, 240);
-        groupBox = new QGroupBox(SignIn);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(250, 10, 231, 221));
-        listView = new QListView(groupBox);
-        listView->setObjectName(QStringLiteral("listView"));
-        listView->setGeometry(QRect(10, 20, 71, 192));
-        listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        layoutWidget_3 = new QWidget(groupBox);
+        SignIn->resize(280, 257);
+        tabWidget_2 = new QTabWidget(SignIn);
+        tabWidget_2->setObjectName(QStringLiteral("tabWidget_2"));
+        tabWidget_2->setGeometry(QRect(0, 0, 469, 256));
+        tabWidget_2->setAcceptDrops(true);
+        tabWidget_2->setAutoFillBackground(true);
+        tab1 = new QWidget();
+        tab1->setObjectName(QStringLiteral("tab1"));
+        layoutWidget_4 = new QWidget(tab1);
+        layoutWidget_4->setObjectName(QStringLiteral("layoutWidget_4"));
+        layoutWidget_4->setGeometry(QRect(90, 30, 171, 121));
+        gridLayout_4 = new QGridLayout(layoutWidget_4);
+        gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
+        gridLayout_4->setContentsMargins(0, 0, 0, 0);
+        verticalSpacer_8 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_4->addItem(verticalSpacer_8, 4, 0, 1, 1);
+
+        pushButton_4 = new QPushButton(layoutWidget_4);
+        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
+
+        gridLayout_4->addWidget(pushButton_4, 4, 1, 1, 1);
+
+        pushButton_3 = new QPushButton(layoutWidget_4);
+        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+
+        gridLayout_4->addWidget(pushButton_3, 2, 1, 1, 1);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_4->addItem(horizontalSpacer_5, 2, 0, 1, 1);
+
+        splitter_4 = new QSplitter(layoutWidget_4);
+        splitter_4->setObjectName(QStringLiteral("splitter_4"));
+        splitter_4->setOrientation(Qt::Horizontal);
+        label_6 = new QLabel(splitter_4);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        splitter_4->addWidget(label_6);
+        lineEdit_2 = new QLineEdit(splitter_4);
+        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
+        splitter_4->addWidget(lineEdit_2);
+
+        gridLayout_4->addWidget(splitter_4, 0, 0, 1, 2);
+
+        verticalSpacer_9 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_4->addItem(verticalSpacer_9, 1, 1, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_4->addItem(verticalSpacer_2, 5, 1, 1, 1);
+
+        listView_2 = new QListView(tab1);
+        listView_2->setObjectName(QStringLiteral("listView_2"));
+        listView_2->setGeometry(QRect(10, 20, 71, 192));
+        listView_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        label_2 = new QLabel(tab1);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setGeometry(QRect(190, 170, 54, 12));
+        tabWidget_2->addTab(tab1, QString());
+        tab2 = new QWidget();
+        tab2->setObjectName(QStringLiteral("tab2"));
+        label_3 = new QLabel(tab2);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setGeometry(QRect(190, 170, 54, 12));
+        listView_3 = new QListView(tab2);
+        listView_3->setObjectName(QStringLiteral("listView_3"));
+        listView_3->setGeometry(QRect(10, 20, 71, 192));
+        listView_3->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        layoutWidget_3 = new QWidget(tab2);
         layoutWidget_3->setObjectName(QStringLiteral("layoutWidget_3"));
-        layoutWidget_3->setGeometry(QRect(90, 70, 131, 111));
+        layoutWidget_3->setGeometry(QRect(90, 30, 179, 130));
         gridLayout_3 = new QGridLayout(layoutWidget_3);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
         gridLayout_3->setContentsMargins(0, 0, 0, 0);
-        verticalSpacer_5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_3->addItem(verticalSpacer_5, 3, 1, 1, 1);
-
-        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout_3->addItem(horizontalSpacer_4, 2, 0, 1, 1);
-
         pushButton_5 = new QPushButton(layoutWidget_3);
         pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
 
-        gridLayout_3->addWidget(pushButton_5, 2, 1, 1, 1);
+        gridLayout_3->addWidget(pushButton_5, 3, 1, 1, 1);
 
-        verticalSpacer_6 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout_3->addItem(verticalSpacer_6, 4, 0, 1, 1);
-
-        pushButton_6 = new QPushButton(layoutWidget_3);
-        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
-
-        gridLayout_3->addWidget(pushButton_6, 4, 1, 1, 1);
+        gridLayout_3->addItem(horizontalSpacer_4, 3, 0, 1, 1);
 
         splitter_3 = new QSplitter(layoutWidget_3);
         splitter_3->setObjectName(QStringLiteral("splitter_3"));
@@ -112,67 +163,37 @@ public:
 
         verticalSpacer_7 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_3->addItem(verticalSpacer_7, 1, 1, 1, 1);
+        gridLayout_3->addItem(verticalSpacer_7, 2, 1, 1, 1);
 
-        label_3 = new QLabel(groupBox);
-        label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(160, 190, 54, 12));
-        groupBox_2 = new QGroupBox(SignIn);
-        groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        groupBox_2->setGeometry(QRect(10, 10, 231, 221));
-        listView_2 = new QListView(groupBox_2);
-        listView_2->setObjectName(QStringLiteral("listView_2"));
-        listView_2->setGeometry(QRect(10, 20, 71, 192));
-        listView_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        layoutWidget_2 = new QWidget(groupBox_2);
-        layoutWidget_2->setObjectName(QStringLiteral("layoutWidget_2"));
-        layoutWidget_2->setGeometry(QRect(90, 70, 131, 111));
-        gridLayout_2 = new QGridLayout(layoutWidget_2);
-        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        gridLayout_2->setContentsMargins(0, 0, 0, 0);
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacer_6 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_2->addItem(verticalSpacer_3, 3, 1, 1, 1);
+        gridLayout_3->addItem(verticalSpacer_6, 5, 0, 1, 1);
 
-        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_2->addItem(horizontalSpacer_3, 2, 0, 1, 1);
+        gridLayout_3->addItem(verticalSpacer, 6, 1, 1, 1);
 
-        pushButton_3 = new QPushButton(layoutWidget_2);
-        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+        pushButton_6 = new QPushButton(layoutWidget_3);
+        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
 
-        gridLayout_2->addWidget(pushButton_3, 2, 1, 1, 1);
+        gridLayout_3->addWidget(pushButton_6, 5, 1, 1, 1);
 
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        label_7 = new QLabel(layoutWidget_3);
+        label_7->setObjectName(QStringLiteral("label_7"));
 
-        gridLayout_2->addItem(verticalSpacer_2, 4, 0, 1, 1);
+        gridLayout_3->addWidget(label_7, 1, 0, 1, 1);
 
-        pushButton_4 = new QPushButton(layoutWidget_2);
-        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
+        lineEdit_4 = new QLineEdit(layoutWidget_3);
+        lineEdit_4->setObjectName(QStringLiteral("lineEdit_4"));
 
-        gridLayout_2->addWidget(pushButton_4, 4, 1, 1, 1);
+        gridLayout_3->addWidget(lineEdit_4, 1, 1, 1, 1);
 
-        splitter_2 = new QSplitter(layoutWidget_2);
-        splitter_2->setObjectName(QStringLiteral("splitter_2"));
-        splitter_2->setOrientation(Qt::Horizontal);
-        label_4 = new QLabel(splitter_2);
-        label_4->setObjectName(QStringLiteral("label_4"));
-        splitter_2->addWidget(label_4);
-        lineEdit_2 = new QLineEdit(splitter_2);
-        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
-        splitter_2->addWidget(lineEdit_2);
-
-        gridLayout_2->addWidget(splitter_2, 0, 0, 1, 2);
-
-        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_2->addItem(verticalSpacer_4, 1, 1, 1, 1);
-
-        label_2 = new QLabel(groupBox_2);
-        label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(160, 190, 54, 12));
+        tabWidget_2->addTab(tab2, QString());
 
         retranslateUi(SignIn);
+
+        tabWidget_2->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(SignIn);
     } // setupUi
@@ -180,16 +201,17 @@ public:
     void retranslateUi(QWidget *SignIn)
     {
         SignIn->setWindowTitle(QApplication::translate("SignIn", "Form", 0));
-        groupBox->setTitle(QApplication::translate("SignIn", "\350\277\234\347\250\213\347\273\210\347\253\257\347\256\241\347\220\206", 0));
-        pushButton_5->setText(QApplication::translate("SignIn", "\346\267\273\345\212\240", 0));
-        pushButton_6->setText(QApplication::translate("SignIn", "\345\210\240\351\231\244", 0));
-        label_5->setText(QApplication::translate("SignIn", "\347\273\210\347\253\257\345\217\267\357\274\232", 0));
-        label_3->setText(QString());
-        groupBox_2->setTitle(QApplication::translate("SignIn", "\346\234\254\345\234\260\347\273\210\347\253\257\347\256\241\347\220\206", 0));
-        pushButton_3->setText(QApplication::translate("SignIn", "\346\267\273\345\212\240", 0));
         pushButton_4->setText(QApplication::translate("SignIn", "\345\210\240\351\231\244", 0));
-        label_4->setText(QApplication::translate("SignIn", "\347\273\210\347\253\257\345\217\267\357\274\232", 0));
+        pushButton_3->setText(QApplication::translate("SignIn", "\346\267\273\345\212\240", 0));
+        label_6->setText(QApplication::translate("SignIn", "   \347\273\210\347\253\257ID\357\274\232 ", 0));
         label_2->setText(QString());
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab1), QApplication::translate("SignIn", "\346\234\254\345\234\260\347\273\210\347\253\257\347\256\241\347\220\206", 0));
+        label_3->setText(QString());
+        pushButton_5->setText(QApplication::translate("SignIn", "\346\267\273\345\212\240", 0));
+        label_5->setText(QApplication::translate("SignIn", " device_id :  ", 0));
+        pushButton_6->setText(QApplication::translate("SignIn", "\345\210\240\351\231\244", 0));
+        label_7->setText(QApplication::translate("SignIn", " device_name :", 0));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab2), QApplication::translate("SignIn", "\350\277\234\347\250\213\347\273\210\347\253\257\347\256\241\347\220\206", 0));
     } // retranslateUi
 
 };

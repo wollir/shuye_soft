@@ -12,6 +12,7 @@
 _Login::_Login(QWidget *parent) :   QWidget(parent), ui(new Ui::_Login)
 {
     ui->setupUi(this);
+     this->setWindowIcon(QIcon(":/sia.jpg"));
     //设置窗体背景
     QPalette palette;
     palette.setBrush(QPalette::Background,QBrush(QPixmap(":/login_background.png")));

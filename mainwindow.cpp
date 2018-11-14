@@ -5,7 +5,7 @@
 #include"signin.h"
 #include"database.h"
 #include"onenet_http.h"
-//#define wireless 1
+#define wireless 1
 
 const int real_receive_size = 60;
 const int used_pixel = 60;
@@ -317,7 +317,8 @@ void MainWindow::active()
         while( QTime::currentTime() < _Timer)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
-    ui->pushButton_3->setDisabled(false);
+    if(!aoto_active_statues)
+        ui->pushButton_3->setDisabled(false);
     flashAlarm(ui->label_9,isAlarm);
 }
 // 将对应终端的信息设置成接受到的信息。
@@ -337,17 +338,9 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     if(&(*whichtoDisplay) == term)
         curve_update();
     if(term->device_id.size()){ //在云上有注册
-        onenetPostData *temp_thread = new onenetPostData(term->device_id,term->api_key,term->temprature,term->Humidity,term->liq_height);
+        onenetPostData *temp_thread = new onenetPostData(term->device_id,MASTER_APIKEY,term->temprature,term->Humidity,term->liq_height);
         temp_thread->start();
     }
-
-    //增加节点
-    createNewDevice *Cre_dev = new createNewDevice("ttest");
-    Cre_dev->start();
-    while (!Cre_dev->isover) {
-        ;
-    }
-    qDebug()<<Cre_dev->accept_deviceid;
 
 }
 void MainWindow::on_comboBox_currentIndexChanged(int index)
@@ -359,9 +352,9 @@ void MainWindow::sys_init()
 {
     this->setWindowIcon(QIcon(":/sia.jpg"));
     //-------------设置窗体背景
-//    QPalette palette;
-//    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/background.png")));
-//    this->setPalette(palette);
+    //    QPalette palette;
+    //    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/background.png")));
+    //    this->setPalette(palette);
     QIcon icon(":/refresh.png");
     ui->refresh_b->setIcon(icon);
     ui->refresh_b->setIconSize(QSize(20,20));

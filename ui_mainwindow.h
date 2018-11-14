@@ -14,7 +14,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
-#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -54,11 +53,6 @@ public:
     QLabel *label_4;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *clear_receive;
-    QWidget *layoutWidget1;
-    QGridLayout *gridLayout_3;
-    QwtThermo *Thermo;
-    QSpacerItem *verticalSpacer_2;
-    QLabel *label_8;
     QTableWidget *tableWidget;
     QGroupBox *groupBox_2;
     QPushButton *pushButton_3;
@@ -72,6 +66,14 @@ public:
     QPushButton *pushButton_6;
     QLabel *label_9;
     QLabel *label_10;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout_3;
+    QwtThermo *Thermo;
+    QSpacerItem *verticalSpacer_2;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer;
+    QLabel *label_8;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -147,31 +149,6 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout);
 
-        layoutWidget1 = new QWidget(centralWidget);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(630, 430, 81, 221));
-        gridLayout_3 = new QGridLayout(layoutWidget1);
-        gridLayout_3->setSpacing(6);
-        gridLayout_3->setContentsMargins(11, 11, 11, 11);
-        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        gridLayout_3->setContentsMargins(0, 0, 0, 0);
-        Thermo = new QwtThermo(layoutWidget1);
-        Thermo->setObjectName(QStringLiteral("Thermo"));
-        Thermo->setUpperBound(50);
-        Thermo->setAlarmEnabled(true);
-        Thermo->setPipeWidth(15);
-
-        gridLayout_3->addWidget(Thermo, 0, 0, 2, 1);
-
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_3->addItem(verticalSpacer_2, 0, 1, 1, 1);
-
-        label_8 = new QLabel(layoutWidget1);
-        label_8->setObjectName(QStringLiteral("label_8"));
-
-        gridLayout_3->addWidget(label_8, 1, 1, 1, 1);
-
         tableWidget = new QTableWidget(centralWidget);
         if (tableWidget->columnCount() < 6)
             tableWidget->setColumnCount(6);
@@ -241,6 +218,47 @@ public:
         label_10 = new QLabel(centralWidget);
         label_10->setObjectName(QStringLiteral("label_10"));
         label_10->setGeometry(QRect(600, 410, 54, 12));
+        widget = new QWidget(centralWidget);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(630, 430, 81, 221));
+        verticalLayout = new QVBoxLayout(widget);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        Thermo = new QwtThermo(widget);
+        Thermo->setObjectName(QStringLiteral("Thermo"));
+        Thermo->setUpperBound(50);
+        Thermo->setAlarmEnabled(true);
+        Thermo->setPipeWidth(15);
+
+        horizontalLayout_3->addWidget(Thermo);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        horizontalLayout_3->addItem(verticalSpacer_2);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer);
+
+        label_8 = new QLabel(widget);
+        label_8->setObjectName(QStringLiteral("label_8"));
+
+        horizontalLayout_2->addWidget(label_8);
+
+
+        verticalLayout->addLayout(horizontalLayout_2);
+
         MainWindow->setCentralWidget(centralWidget);
         pushButton_6->raise();
         groupBox->raise();
@@ -281,7 +299,6 @@ public:
         label_3->setText(QApplication::translate("MainWindow", "\346\216\245\346\224\266", 0));
         label_4->setText(QApplication::translate("MainWindow", "0", 0));
         clear_receive->setText(QApplication::translate("MainWindow", "Clear", 0));
-        label_8->setText(QApplication::translate("MainWindow", "MM", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "\347\227\205\345\272\212\345\217\267", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
@@ -304,6 +321,7 @@ public:
         pushButton_6->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\347\256\241\347\220\206", 0));
         label_9->setText(QString());
         label_10->setText(QApplication::translate("MainWindow", "\346\266\262\344\275\215\351\253\230\345\272\246\357\274\232", 0));
+        label_8->setText(QApplication::translate("MainWindow", "MM", 0));
     } // retranslateUi
 
 };
