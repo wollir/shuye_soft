@@ -22,6 +22,7 @@ public:
     bool dropOneNode(unsigned short id);
     bool isValidUser(QString name,QString pwd);
     QPair<QString,QString> get_device_info(uint16_t id);
+    void shuye_over_action(uint16_t id); //输液完成后的操作
 };
 
 #endif // DATABASE_H

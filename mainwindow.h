@@ -32,7 +32,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0,QString user = "null");
     ~MainWindow() {  delete ui;    }
     QSerialPort serial;//串口实例
     QList<QSerialPortInfo> infos;
@@ -75,6 +75,7 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    QString cur_user;
     //uchar after_send_time = 0; //记录发送以后的时间，如果长时间不回复，说明掉线了
     QByteArray re;
     unsigned char recieve_succeed = 0;
@@ -91,10 +92,10 @@ private:
 
     //bool exit_flag[max_terminal_num] = {0,0,0,0,0};  //第几位表示第几个节点为1。
     //X轴
-    double pixel[10] = {0, 5, 9,10, 14,25,36,38,50,52};
+    //double pixel[10] = {0, 5, 9,10, 14,25,36,38,50,52};
     double pixel1[3648] = {0};
     //Y轴数据
-    double gray_value[10] = {123, 145, 251, 189, 245, 110, 211, 129, 165,210};
+   // double gray_value[10] = {123, 145, 251, 189, 245, 110, 211, 129, 165,210};
     //  画下降沿的那条标志线，，，
     double x_falling[2];
     double y_falling[2] = {5,200};
@@ -112,5 +113,8 @@ private:
     Database *databasehandle;
     QList<terminal_struct> ::iterator Ite_cur;
     QList<terminal_struct> ::iterator whichtoDisplay;
+
+    //下位机是否报警完成
+    uint8_t isalarted = 0;
 };
 #endif // MAINWINDOW_H

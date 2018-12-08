@@ -13,10 +13,10 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -28,7 +28,8 @@ public:
     QLineEdit *LINE_password;
     QLabel *label;
     QLabel *label_2;
-    QDialogButtonBox *buttonBox;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
 
     void setupUi(QWidget *_Login)
     {
@@ -49,11 +50,12 @@ public:
         label_2 = new QLabel(_Login);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(60, 120, 54, 12));
-        buttonBox = new QDialogButtonBox(_Login);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setGeometry(QRect(140, 200, 156, 23));
-        buttonBox->setFocusPolicy(Qt::TabFocus);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        pushButton = new QPushButton(_Login);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setGeometry(QRect(140, 190, 75, 23));
+        pushButton_2 = new QPushButton(_Login);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButton_2->setGeometry(QRect(220, 190, 75, 23));
 
         retranslateUi(_Login);
 
@@ -65,6 +67,8 @@ public:
         _Login->setWindowTitle(QApplication::translate("_Login", "\347\231\273\345\275\225", 0));
         label->setText(QApplication::translate("_Login", "\347\224\250\346\210\267\345\220\215\357\274\232", 0));
         label_2->setText(QApplication::translate("_Login", "\345\257\206 \347\240\201\357\274\232", 0));
+        pushButton->setText(QApplication::translate("_Login", "\347\231\273\345\275\225", 0));
+        pushButton_2->setText(QApplication::translate("_Login", "\351\200\200\345\207\272", 0));
     } // retranslateUi
 
 };

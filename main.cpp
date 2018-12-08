@@ -2,7 +2,7 @@
 #include <QApplication>
 #include"_login.h"
 
-#define  NEEDLOG 0
+#define  NEEDLOG 1
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

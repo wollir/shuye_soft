@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QList>
 #include<QMap>
+#include<QDateTime>
 Database::Database()
 {}
 
@@ -130,6 +131,8 @@ bool Database::dropOneNode(unsigned short id)
 
 bool Database::isValidUser(QString name, QString pwd)
 {
+    if(name.size() == 0 || pwd.size() == 0)
+        return false;
     QSqlQuery quety;
     quety.exec("select password from users where name=\""+name+"\"");
     quety.next();
@@ -150,4 +153,20 @@ QPair<QString, QString> Database::get_device_info(uint16_t id)
     id_api.first = quety.value(0).toString();
     id_api.second = quety.value(1).toString();
     return id_api;
+}
+
+void Database::shuye_over_action(uint16_t id)
+{
+    QSqlQuery quety;
+    QDateTime current_date_time =QDateTime::currentDateTime();
+    //QString current_date =current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");    //yyyy表示年；MM表示月；dd表示日； hh表示小时；mm表示分；ss表示秒；zzz表示毫秒；ddd表示周几
+    QString time =current_date_time.toString("yyyy/MM/dd hh:mm:ss");    //yyyy表示年；MM表示月；dd表示日； hh表示小时；mm表示分；ss表示秒；zzz表示毫秒；ddd表示周几
+    quety.prepare("insert into shuye_over (id, over_time)"
+                  "values(:id, :over_time)");
+    quety.bindValue(":id", id);
+    quety.bindValue(":over_time", time);
+    bool res =  quety.exec();
+    if(!res)
+        qDebug() << "插入失败";
+
 }

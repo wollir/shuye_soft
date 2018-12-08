@@ -1,6 +1,5 @@
 #ifndef _LOGIN_H
 #define _LOGIN_H
-
 #include <QWidget>
 #include <QVector>
 #include<QAbstractButton>
@@ -15,7 +14,11 @@ public:
     explicit _Login(QWidget *parent = 0);
     ~_Login() {delete ui;}
 private slots:
-    void on_buttonBox_clicked(QAbstractButton *button);
+    //void on_buttonBox_clicked(QAbstractButton *button);
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::_Login *ui;
     QVector<QPair<QString,QString>> users;

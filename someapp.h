@@ -4,13 +4,16 @@
 #include<QTableWidget>
 #include<QVector>
 #include"database.h"
+
 typedef unsigned short u16;
+const int CCDDataSize = 60;
+
 class QLabel;
 
 static QVector<uchar> active_key{69,82,0,0,0,50,0,15,66,64,0,0};  //控制 ICG SH的积分时间
-static QVector<uchar> addr{0x00,0x00,0x17};  // 两字节地址，1字节目标信道
-static QVector<uchar> call_terminal{69,82,1,1,1,1,1,1,1,1,1,1}; //召唤下位机，收到回复说明存在
-
+static QVector<uchar> addr{0x00,0x00,0x17};                       // 两字节地址，1字节目标信道
+static QVector<uchar> call_terminal{69,82,1,1,1,1,1,1,1,1,1,1};   //召唤下位机，收到回复说明存在
+/* 温湿度数据 */
 typedef struct
 {
     uchar tempL;
@@ -18,13 +21,49 @@ typedef struct
     uchar humiL;
     uchar humiH;
 }sht_data;
+
+/*初始高度*/
+class baseheight{
+    QVector<float> height;
+    enum {SIZE = 3};         //前几个值决定当前节点的初始高度
+    float res_height;
+    bool base_ready;
+    float heightDiff;  //基准液位高度 - 目前液位高度，一般来说为正值
+
+public:
+    QList <float> hDiffList;// 液位高度差链表；
+
+    baseheight():res_height(0),base_ready(false),heightDiff(0){}
+    void add(float newData){
+        if(base_ready){
+            heightDiff = res_height - newData;
+            hDiffList.push_back(heightDiff);
+            return;
+            }
+        if(height.size() < SIZE)
+            height.push_back(newData);
+        else{
+            qSort(height.begin(),height.end());
+            res_height = height[height.size()/2];
+            base_ready = true;
+        }
+    }
+    bool isBaseReady(){
+        return base_ready;
+    }
+    float Getheightdiff(){
+        return heightDiff;
+    }
+
+};
+/* 终端数据 */
 class terminal_struct{
 public:
     uint16_t id;
     unsigned char addr_channle[3]; //结点，信道地址
     QVector<uchar> activat_cmd; //CCD传感器数据请求指令
     QVector<uchar> call_cmd;    //下位机登记指令
-    uchar received_data[60];    //CCD传感器数据
+    uchar received_data[CCDDataSize];    //CCD传感器数据
     QString received_time;      //接收时间
     bool isexist;               //节点登记结果
     float liq_height;       //液面高度
@@ -34,7 +73,7 @@ public:
     QString api_key;
     QString device_id;
     //int hang; //在tableWidget的第几行
-
+    baseheight BaseHeight;
     terminal_struct(u16 a):id(a){
         call_cmd =call_terminal;
         call_cmd[2] = a>>8;
@@ -69,4 +108,5 @@ void terminal_disconnected(QTableWidget *tab,terminal_struct *term);  //当节�
 void cal_TempHumi(sht_data data,double &temp,double &humi);
 QList<terminal_struct> ::iterator which_node(u16 id, QList<terminal_struct> *Nodes); //找id对应的节点迭代器
 void flashAlarm(QLabel * lab,bool flash);
+
 #endif // SOMEAPP_H

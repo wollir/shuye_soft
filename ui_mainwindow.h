@@ -74,6 +74,7 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
     QLabel *label_8;
+    QLabel *label_user;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -259,6 +260,9 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_2);
 
+        label_user = new QLabel(centralWidget);
+        label_user->setObjectName(QStringLiteral("label_user"));
+        label_user->setGeometry(QRect(10, 10, 141, 16));
         MainWindow->setCentralWidget(centralWidget);
         pushButton_6->raise();
         groupBox->raise();
@@ -269,6 +273,7 @@ public:
         groupBox_2->raise();
         label_9->raise();
         label_10->raise();
+        label_user->raise();
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
@@ -322,6 +327,7 @@ public:
         label_9->setText(QString());
         label_10->setText(QApplication::translate("MainWindow", "\346\266\262\344\275\215\351\253\230\345\272\246\357\274\232", 0));
         label_8->setText(QApplication::translate("MainWindow", "MM", 0));
+        label_user->setText(QApplication::translate("MainWindow", "\345\275\223\345\211\215\347\231\273\345\275\225:", 0));
     } // retranslateUi
 
 };

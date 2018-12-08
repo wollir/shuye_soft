@@ -5,6 +5,7 @@
 #include"signin.h"
 #include"database.h"
 #include"onenet_http.h"
+#include<QTextCodec>
 #define wireless 1
 
 const int real_receive_size = 60;
@@ -16,8 +17,8 @@ sht_data temp_humi;
 unsigned char  yuzhi = 0;
 uchar min_position = 0;
 u16 current_row = 0; //当前tablewigit的行数
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
-  ,Nodes(new QList<terminal_struct>),which_active("all")
+MainWindow::MainWindow(QWidget *parent,QString user) : QMainWindow(parent), ui(new Ui::MainWindow)
+  ,Nodes(new QList<terminal_struct>),which_active("all"),cur_user(user)
 {
     ui->setupUi(this);
     sys_init();
@@ -56,12 +57,10 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
         if((re[0] == 0xfe) && (re[1] == 0x01))//数据
         {
             recieve_succeed = 1;   //按钮事件等待这个标志来处理信息
-            //qDebug() << "recieve_succeed";
             re.remove(0,2); //去帧头
         }
         else if((re[0] == 0xff) && (re[1] == 0x02))//回应，call terminal
         {
-            //qDebug() <<"recieve from id:"<< (uint8_t)re[2]*256+(uint8_t)re[3];
             if((uint8_t)re[2]*256+(uint8_t)re[3] == Ite_cur->id )//确认是当前终端的数据
                 Ite_cur->isexist = true;
             re = 0;
@@ -98,13 +97,12 @@ void MainWindow::curve_init()
     //绘制横坐标标度
     ui->qwtPlot_2->setAxisScale( QwtPlot::xBottom, 0.0, 65.0);
 
-    QwtSymbol *symbol = new QwtSymbol( QwtSymbol::Ellipse,QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 3, 3) );//设置样本点的颜色、大小
-    curve_2.setSymbol(symbol);//添加样本点形状
+
     //curve.setCurveAttribute(QwtPlotCurve::Fitted, true);//使曲线更光滑，不加这句曲线会很硬朗，有折点
-    curve_2.setPen(QPen(Qt::red));//设置画笔
-    curve_2.setSamples(pixel,gray_value,10);
+    //curve_2.setPen(QPen(Qt::red));//设置画笔
+    //curve_2.setSamples(pixel,gray_value,10);
     //    //加到plot，plot由IDE创建
-    curve_2.attach(ui->qwtPlot_2);
+    //curve_2.attach(ui->qwtPlot_2);
     QwtPlotGrid *grid = new QwtPlotGrid;//网格
     grid->enableXMin(true);
     grid->setMajorPen(QPen(Qt::white, 0, Qt::DotLine));//大格子
@@ -124,7 +122,10 @@ void MainWindow::curve_update()
     // ----------------------- 存储数据到文本
     //save_data(dou2uchar,used_pixel);
     ui->textEdit_2->setText(prepare_str_for_textview(whichtoDisplay->received_data,used_pixel));
+    QwtSymbol *symbol = new QwtSymbol( QwtSymbol::Ellipse,QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 3, 3) );//设置样本点的颜色、大小
+    curve_2.setSymbol(symbol);//添加样本点形状
     curve_2.setSamples(pixel1,view_re,used_pixel);
+    curve_2.setPen(QPen(Qt::red));//设置画笔
     curve_2.attach(ui->qwtPlot_2);
     curve.attach(ui->qwtPlot_2);
     ui->qwtPlot_2->replot();
@@ -253,7 +254,7 @@ void MainWindow::call_for_terminal() //这里发，serialread 收
             ui->comboBox_3->addItem(QString::number(ite->id));
         }
         //延时一会，避免相互影响
-       /* _Timer = QTime::currentTime().addMSecs(100);
+        /* _Timer = QTime::currentTime().addMSecs(100);
         while( QTime::currentTime() < _Timer)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);*/
     }
@@ -298,6 +299,7 @@ void MainWindow::active()
             continue;
         if(!isAllDisplay && which_active.toInt() != ite->id)
             continue;
+        ite->activat_cmd[2] = ite->isAlarm; //发送是否需要报警
         recieve_succeed = 0;
         serial.clear();
 #ifdef wireless
@@ -310,6 +312,18 @@ void MainWindow::active()
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
         if(recieve_succeed == 1){
+            //下位机报警处理
+            if(re[66]==1){ //下位机是否报警成功
+                qDebug()<<"报警完成";
+                ite->isexist = false;
+                ite->isAlarm =false;
+                terminal_disconnected(ui->tableWidget,&(*ite));
+                databasehandle->shuye_over_action(ite->id); //输液完成后,存入数据库
+                flashAlarm(ui->label_9,false);
+                re.clear();
+                return;
+            }
+
             //qDebug() << "最晚接收时间为："<< _Timer <<' '<<"现在时间："<<QTime::currentTime();
             data_process();
             things_todo_after_received(&(*ite)); //相当于Ite_cur
@@ -325,7 +339,7 @@ void MainWindow::active()
             re.clear();
         }
         //延时一会，避免相互影响
-       /* _Timer = QTime::currentTime().addMSecs(100);
+        /* _Timer = QTime::currentTime().addMSecs(100);
         while( QTime::currentTime() < _Timer)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);*/
     }
@@ -341,7 +355,9 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     min_position = calmanfilter.find_min1(term->received_data,used_pixel);
     //qDebug()<< min_position <<endl;
     term->liq_height =  calmanfilter.liquid_pos(min_position);
-    term->isAlarm = (term->liq_height <= 10)? true:false;//是否需要报警
+    term->BaseHeight.add(term->liq_height);
+    if(term->BaseHeight.isBaseReady() && !term->isAlarm) //接收够次数（选择基准液面位置）， 不报警的时候才重新赋值
+        term->isAlarm = (term->liq_height <= 10)? true:false;//是否需要报警
     //alarmOrnot(term,ui->tableWidget);
     term->received_time = get_time();
     DataTOTableView(ui->tableWidget,term); //表格显示
@@ -368,6 +384,10 @@ void MainWindow::sys_init()
     QIcon icon(":/refresh.png");
     ui->refresh_b->setIcon(icon);
     ui->refresh_b->setIconSize(QSize(20,20));
+    //---------------设置 当前用户
+    QString aa ="当前登录："+cur_user.toLatin1();
+    ui->label_user->setText(aa);
+
     //---------------设置 TextEdit 的背景
     QPalette palette_text = ui->textEdit_2->palette();
     //palette_text.setColor(QPalette::Background,Qt::gray);    //设置颜色
