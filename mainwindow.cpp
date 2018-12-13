@@ -6,7 +6,7 @@
 #include"database.h"
 #include"onenet_http.h"
 #include<QTextCodec>
-#define wireless 1
+#define wireless 0
 
 const int real_receive_size = 60;
 const int used_pixel = 60;
@@ -52,10 +52,11 @@ void MainWindow::serialRead()    // 这里有可能将两帧数据各取一段�
     if(numReadTotal == 2 + real_receive_size  + 4 + 2 + 1+1)   //接收固定的 俩帧头 + 60个字节  +温湿度+ 终端号 + 是否报警了+预留 = 70
     {
         ui->label_4->setText(QString::number(re.length()));  //显示接收的长度
-        //QString current_text = ui->textEdit_2->toPlainText();
-        //ui->textEdit_2->setText(current_text + re.toHex());
+        QString current_text = ui->textEdit_2->toPlainText();
+        ui->textEdit_2->setText(current_text + re.toHex());
         if((re[0] == 0xfe) && (re[1] == 0x01))//数据
         {
+            qDebug()<<"确认数据帧头成功。。";
             recieve_succeed = 1;   //按钮事件等待这个标志来处理信息
             re.remove(0,2); //去帧头
         }
@@ -139,6 +140,7 @@ void MainWindow::data_process()
     //i++;
     temp_humi.tempL = re[i++];temp_humi.tempH = re[i++];
     temp_humi.humiL = re[i++];temp_humi.humiH = re[i++];
+    qDebug()<<temp_humi.tempH<<'&'<<temp_humi.tempL;
     //SortFrom3648(dou2uchar,sorted_60data,used_pixel);       //挑出60个数据；
     calmanfilter.shift_win_filter(dou2uchar,used_pixel);      // 滑动窗滤波
     re.clear();
@@ -239,7 +241,7 @@ void MainWindow::call_for_terminal() //这里发，serialread 收
         qDebug() <<"term:"<<ite->id;
         Ite_cur = ite;
         ite->isexist = false;
-#ifdef wireless
+#if wireless
         serial.write((const char*)ite->addr_channle,3);
 #endif
         serial.write((const char*)ite->call_cmd.begin(),12);
@@ -302,16 +304,17 @@ void MainWindow::active()
         ite->activat_cmd[2] = ite->isAlarm; //发送是否需要报警
         recieve_succeed = 0;
         serial.clear();
-#ifdef wireless
+#if wireless
         serial.write((const char*)ite->addr_channle,3);
 #endif
         serial.write((const char*)ite->activat_cmd.begin(),12);
 
-        QTime _Timer = QTime::currentTime().addMSecs(3000);
+        QTime _Timer = QTime::currentTime().addMSecs(5000);
         while( QTime::currentTime() < _Timer && !recieve_succeed)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
         if(recieve_succeed == 1){
+            qDebug() <<"接收成功标志置位";
             //下位机报警处理
             if(re[66]==1){ //下位机是否报警成功
                 qDebug()<<"报警完成";
