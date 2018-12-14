@@ -95,7 +95,7 @@ void MainWindow::curve_init()
 {
     ui->qwtPlot_2->setTitle("液面数据");
     ui->qwtPlot_2->setCanvasBackground(Qt::gray);
-    ui->qwtPlot_2->setAxisScale( QwtPlot::yLeft, 100, 200.0);
+    ui->qwtPlot_2->setAxisScale( QwtPlot::yLeft, 50, 200.0);
     ui->qwtPlot_2->setAxisScale( QwtPlot::xBottom, 0.0, 65.0);  //绘制横坐标标度
 
     ui->qwtPlot_3->setTitle("液位差");
