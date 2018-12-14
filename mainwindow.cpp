@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent,QString user) : QMainWindow(parent), ui(n
 {
     ui->setupUi(this);
     sys_init();
+
 }
 void MainWindow::initSeialPort()
 {
@@ -95,10 +96,12 @@ void MainWindow::curve_init()
     ui->qwtPlot_2->setTitle("液面数据");
     ui->qwtPlot_2->setCanvasBackground(Qt::gray);
     ui->qwtPlot_2->setAxisScale( QwtPlot::yLeft, 100, 200.0);
-    //绘制横坐标标度
-    ui->qwtPlot_2->setAxisScale( QwtPlot::xBottom, 0.0, 65.0);
+    ui->qwtPlot_2->setAxisScale( QwtPlot::xBottom, 0.0, 65.0);  //绘制横坐标标度
 
-
+    ui->qwtPlot_3->setTitle("液位差");
+    ui->qwtPlot_3->setCanvasBackground(Qt::gray);
+    ui->qwtPlot_3->setAxisScale( QwtPlot::yLeft, -5, 5);
+    ui->qwtPlot_3->setAxisScale( QwtPlot::xBottom, 0.0, 65.0);  //绘制横坐标标度
     //curve.setCurveAttribute(QwtPlotCurve::Fitted, true);//使曲线更光滑，不加这句曲线会很硬朗，有折点
     //curve_2.setPen(QPen(Qt::red));//设置画笔
     //curve_2.setSamples(pixel,gray_value,10);
@@ -109,6 +112,13 @@ void MainWindow::curve_init()
     grid->setMajorPen(QPen(Qt::white, 0, Qt::DotLine));//大格子
     grid->setMinorPen(QPen(Qt::gray, 0 , Qt::DotLine));//大格子里的小格子
     grid->attach(ui->qwtPlot_2);
+
+    QwtPlotGrid *grid3 = new QwtPlotGrid;//网格
+    grid3->enableXMin(true);
+    grid3->setMajorPen(QPen(Qt::white, 0, Qt::DotLine));//大格子
+    grid3->setMinorPen(QPen(Qt::gray, 0 , Qt::DotLine));//大格子里的小格子
+    grid3->attach(ui->qwtPlot_3);
+
 }
 void MainWindow::curve_update()
 {
