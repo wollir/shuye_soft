@@ -82,6 +82,7 @@ private:
     QTimer timer;
     QwtPlotCurve curve; // 下降沿那条线
     QwtPlotCurve curve_2;
+    QwtPlotCurve curve_3; //标志液位差的图表的曲线
     //bool activate_flag = 0;// 标志是否激活更新曲线
     QwtPlotGrid *grid;               //网格
     //  terminal[max_terminal_num];//终端结构体指针
@@ -93,7 +94,8 @@ private:
     //bool exit_flag[max_terminal_num] = {0,0,0,0,0};  //第几位表示第几个节点为1。
     //X轴
     //double pixel[10] = {0, 5, 9,10, 14,25,36,38,50,52};
-    double pixel1[3648] = {0};
+    double pixel1[60] = {0};
+    double *temp;//用于将液位差 vector转换成数组来显示的
     //Y轴数据
    // double gray_value[10] = {123, 145, 251, 189, 245, 110, 211, 129, 165,210};
     //  画下降沿的那条标志线，，，

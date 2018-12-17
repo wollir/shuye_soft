@@ -26,11 +26,12 @@ typedef struct
 class baseheight{
     QVector<float> height;
     enum {SIZE = 3};         //前几个值决定当前节点的初始高度
-    float res_height;
+
     bool base_ready;
     float heightDiff;  //基准液位高度 - 目前液位高度，一般来说为正值
 
 public:
+    float res_height;
     QList <float> hDiffList;// 液位高度差链表；
 
     baseheight():res_height(0),base_ready(false),heightDiff(0){}
@@ -74,6 +75,7 @@ public:
     QString device_id;
     //int hang; //在tableWidget的第几行
     baseheight BaseHeight;
+    QVector<float> yeweicha;
     terminal_struct(u16 a):id(a){
         call_cmd =call_terminal;
         call_cmd[2] = a>>8;

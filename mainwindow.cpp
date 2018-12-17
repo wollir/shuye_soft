@@ -93,10 +93,25 @@ void MainWindow::timeout_()  // 100ms 一次
 }
 void MainWindow::curve_init()
 {
+    QwtSymbol *symbol = new QwtSymbol( QwtSymbol::Ellipse,QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 3, 3) );//设置样本点的颜色、大小
+    curve_2.setSymbol(symbol);//添加样本点形状
+
+    curve_2.setPen(QPen(Qt::red));//设置画笔
+    curve_2.attach(ui->qwtPlot_2);
+
+    curve.setPen(QPen(Qt::yellow));//设置画笔
+
+    curve.attach(ui->qwtPlot_2);
+
     ui->qwtPlot_2->setTitle("液面数据");
     ui->qwtPlot_2->setCanvasBackground(Qt::gray);
     ui->qwtPlot_2->setAxisScale( QwtPlot::yLeft, 50, 200.0);
     ui->qwtPlot_2->setAxisScale( QwtPlot::xBottom, 0.0, 65.0);  //绘制横坐标标度
+
+    QwtSymbol *symbol_ = new QwtSymbol( QwtSymbol::Ellipse,QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 3, 3) );//设置样本点的颜色、大小
+    curve_3.setSymbol(symbol_);//添加样本点形状
+    curve_3.setPen(QPen(Qt::red));//设置画笔
+    curve_3.attach(ui->qwtPlot_3);
 
     ui->qwtPlot_3->setTitle("液位差");
     ui->qwtPlot_3->setCanvasBackground(Qt::gray);
@@ -127,19 +142,27 @@ void MainWindow::curve_update()
     }
     ui->Thermo->setValue(whichtoDisplay->liq_height);
     ui->label_8->setText(QString::number(whichtoDisplay->liq_height, 10, 1)+"MM");
-    curve.setPen(QPen(Qt::yellow));//设置画笔
     x_falling[0] = x_falling[1] = min_position;
     curve.setSamples(x_falling,y_falling,2);  // 标志下降沿
+    curve_2.setSamples(pixel1,view_re,used_pixel);
     // ----------------------- 存储数据到文本
     //save_data(dou2uchar,used_pixel);
     ui->textEdit_2->setText(prepare_str_for_textview(whichtoDisplay->received_data,used_pixel));
-    QwtSymbol *symbol = new QwtSymbol( QwtSymbol::Ellipse,QBrush( Qt::yellow ), QPen( Qt::red, 2 ), QSize( 3, 3) );//设置样本点的颜色、大小
-    curve_2.setSymbol(symbol);//添加样本点形状
-    curve_2.setSamples(pixel1,view_re,used_pixel);
-    curve_2.setPen(QPen(Qt::red));//设置画笔
-    curve_2.attach(ui->qwtPlot_2);
-    curve.attach(ui->qwtPlot_2);
     ui->qwtPlot_2->replot();
+
+    //更新节点液位差图表
+    int Xsize = whichtoDisplay->yeweicha.size();
+    if(Xsize < 1)
+        return;
+    ui->qwtPlot_3->setAxisScale( QwtPlot::xBottom, 0, (int)Xsize*3/2+1);  //绘制横坐标标度
+
+    delete[] temp;
+    temp = new double[Xsize];
+    for(int i = 0; i < Xsize; i++){  //vector转换成double*
+        temp[i] = whichtoDisplay->yeweicha[i];
+    }
+    curve_3.setSamples(pixel1,temp,Xsize);
+    ui->qwtPlot_3->replot();
 }
 void MainWindow::data_process()
 {
@@ -151,7 +174,6 @@ void MainWindow::data_process()
     temp_humi.tempL = re[i++];temp_humi.tempH = re[i++];
     temp_humi.humiL = re[i++];temp_humi.humiH = re[i++];
     qDebug()<<temp_humi.tempH<<'&'<<temp_humi.tempL;
-    //SortFrom3648(dou2uchar,sorted_60data,used_pixel);       //挑出60个数据；
     calmanfilter.shift_win_filter(dou2uchar,used_pixel);      // 滑动窗滤波
     re.clear();
 }
@@ -368,9 +390,16 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     min_position = calmanfilter.find_min1(term->received_data,used_pixel);
     //qDebug()<< min_position <<endl;
     term->liq_height =  calmanfilter.liquid_pos(min_position);
+
+    //增加一个液位
     term->BaseHeight.add(term->liq_height);
     if(term->BaseHeight.isBaseReady() && !term->isAlarm) //接收够次数（选择基准液面位置）， 不报警的时候才重新赋值
         term->isAlarm = (term->liq_height <= 10)? true:false;//是否需要报警
+    if(term->BaseHeight.isBaseReady() ){
+        float diff =  term->BaseHeight.res_height - term->liq_height;
+        if(abs(diff) < 5)
+                term->yeweicha.push_back(diff); // 计算液位差，加入到结果中
+    }
     //alarmOrnot(term,ui->tableWidget);
     term->received_time = get_time();
     DataTOTableView(ui->tableWidget,term); //表格显示
