@@ -123,3 +123,4 @@ void flashAlarm(QLabel * lab,bool flash)
     else
         movie->stop();
 }
+//

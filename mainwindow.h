@@ -44,6 +44,7 @@ public:
     void data_process();
     void active();
     void things_todo_after_received(terminal_struct* term);
+    void send_back_evl(terminal_struct *term);
     QSerialPortInfo info;
 private slots:
     void serialRead();

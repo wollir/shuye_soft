@@ -10,7 +10,9 @@ const int CCDDataSize = 60;
 
 class QLabel;
 
-static QVector<uchar> active_key{69,82,0,0,0,50,0,15,66,64,0,0};  //控制 ICG SH的积分时间
+//static QVector<uchar> active_key{69,82,0,0,0,50,0,15,66,64,0,0};  //控制 ICG SH的积分时间
+  static QVector<uchar> active_key{69,82,0,0,0,25,0,0,78,32,0,0};  //控制 ICG SH的积分时间
+// 25 20000
 static QVector<uchar> addr{0x00,0x00,0x17};                       // 两字节地址，1字节目标信道
 static QVector<uchar> call_terminal{69,82,1,1,1,1,1,1,1,1,1,1};   //召唤下位机，收到回复说明存在
 /* 温湿度数据 */

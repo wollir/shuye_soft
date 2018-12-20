@@ -341,7 +341,7 @@ void MainWindow::active()
 #endif
         serial.write((const char*)ite->activat_cmd.begin(),12);
 
-        QTime _Timer = QTime::currentTime().addMSecs(5000);
+        QTime _Timer = QTime::currentTime().addMSecs(3000);
         while( QTime::currentTime() < _Timer && !recieve_succeed)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
@@ -395,21 +395,55 @@ void MainWindow::things_todo_after_received(terminal_struct *term)
     term->BaseHeight.add(term->liq_height);
     if(term->BaseHeight.isBaseReady() && !term->isAlarm) //接收够次数（选择基准液面位置）， 不报警的时候才重新赋值
         term->isAlarm = (term->liq_height <= 10)? true:false;//是否需要报警
+    //计算液位差
     if(term->BaseHeight.isBaseReady() ){
         float diff =  term->BaseHeight.res_height - term->liq_height;
         if(abs(diff) < 5)
-                term->yeweicha.push_back(diff); // 计算液位差，加入到结果中
+            term->yeweicha.push_back(diff); // 计算液位差，加入到结果中
     }
+    // 向下位机返回计算结果
+    send_back_evl(term);
+
     //alarmOrnot(term,ui->tableWidget);
     term->received_time = get_time();
     DataTOTableView(ui->tableWidget,term); //表格显示
     if(&(*whichtoDisplay) == term)
         curve_update();
+
     if(term->device_id.size()){ //在云上有注册
         onenetPostData *temp_thread = new onenetPostData(term->device_id,MASTER_APIKEY,term->temprature,term->Humidity,term->liq_height);
         temp_thread->start();
     }
+}
 
+void MainWindow::send_back_evl(terminal_struct *term)
+{
+    char sendData[12];
+    int i = 0;
+
+    uint16_t ten_temp = (uint16_t)(term->temprature*10);
+    uint16_t ten_hum = (uint16_t)(term->Humidity*10);
+    sendData[i++] = 68;
+    sendData[i++] = 81;
+    sendData[i++] = ten_temp>>8;
+    sendData[i++] = ten_temp&0xff;
+    sendData[i++] = ten_hum>>8;
+    sendData[i++] = ten_hum&0xff;
+    sendData[i++] = term->liq_height*10;
+    if(term->BaseHeight.hDiffList.size())
+        sendData[i++] = (uint8_t)(term->BaseHeight.hDiffList.back()*10);
+    else
+        sendData[i++] = 0;
+    sendData[i++] = (uint8_t)term->isAlarm;
+    sendData[i++] = term->id>>8;
+    sendData[i++] = term->id&0xff;
+    sendData[i++] = 0; //预留
+
+#if wireless
+    serial.write((const char*)term->addr_channle,3);
+#endif
+    serial.write(sendData,12);
+    MyDelay(280); //避免影响下次下行通信
 }
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
